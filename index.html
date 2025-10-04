@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Nexus - AI-Powered Portfolio Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <h1 class="login-title">Portfolio Nexus</h1>
+                <p class="login-subtitle">AI-Powered Portfolio Management</p>
+            </div>
+            <div class="login-form">
+                <h2>Welcome Back</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" value="alex.thompson@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" value="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="app-logo">Portfolio Nexus</h1>
+                </div>
+                <nav class="main-nav">
+                    <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+                    <button class="nav-btn" data-view="portfolio">Portfolio</button>
+                    <button class="nav-btn" data-view="rebalancing">Rebalancing</button>
+                    <button class="nav-btn" data-view="analytics">Analytics</button>
+                    <button class="nav-btn" data-view="settings">Settings</button>
+                </nav>
+                <div class="header-actions">
+                    <div class="notification-icon">
+                        <span class="notification-badge">3</span>
+                        🔔
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-name">Alex Thompson</span>
+                        <button class="user-dropdown">▼</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view active">
+                <div class="dashboard-grid">
+                    <!-- Portfolio Summary -->
+                    <div class="portfolio-summary">
+                        <div class="summary-card">
+                            <h3>Total Portfolio Value</h3>
+                            <div class="portfolio-value">$14,041.40</div>
+                            <div class="portfolio-change positive">+$127.85 (+0.92%) today</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Return</div>
+                            <div class="stat-value positive">+$541.90</div>
+                            <div class="stat-percent">+4.01%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Risk Score</div>
+                            <div class="stat-value">6.2/10</div>
+                            <div class="stat-percent">Moderate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Rebalancing</div>
+                            <div class="stat-value warning">Needed</div>
+                            <div class="stat-percent">4 suggestions</div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Chart -->
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Portfolio Performance (6 months)</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+
+                    <!-- Asset Allocation -->
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Asset Allocation</h3>
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+
+                    <!-- AI Insights -->
+                    <div class="ai-insights">
+                        <h3>AI Insights & Recommendations</h3>
+                        <div class="insight-item">
+                            <div class="insight-icon">🤖</div>
+                            <div class="insight-content">
+                                <div class="insight-title">Rebalancing Recommended</div>
+                                <div class="insight-text">Your crypto allocation is 10.4% above target. Consider reducing by $1,462 to optimize risk.</div>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon">📈</div>
+                            <div class="insight-content">
+                                <div class="insight-title">Market Opportunity</div>
+                                <div class="insight-text">Bonds are undervalued. Increasing allocation by $632 could enhance stability.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="recent-transactions">
+                        <h3>Recent Transactions</h3>
+                        <div class="transaction-list">
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <span class="transaction-symbol">VTI</span>
+                                    <span class="transaction-type">BUY</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-amount">$534.90</div>
+                                    <div class="transaction-date">Sep 28, 2024</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <span class="transaction-symbol">AAPL</span>
+                                    <span class="transaction-type">BUY</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-amount">$534.75</div>
+                                    <div class="transaction-date">Sep 25, 2024</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <span class="transaction-symbol">BTC</span>
+                                    <span class="transaction-type">BUY</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-amount">$432.50</div>
+                                    <div class="transaction-date">Sep 20, 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio View -->
+            <div id="portfolioView" class="view">
+                <div class="portfolio-header">
+                    <h2>Portfolio Holdings</h2>
+                    <div class="portfolio-controls">
+                        <input type="text" id="portfolioSearch" class="form-control" placeholder="Search holdings...">
+                        <select class="form-control" id="assetFilter">
+                            <option value="">All Assets</option>
+                            <option value="stock">Stocks</option>
+                            <option value="etf">ETFs</option>
+                            <option value="bond_etf">Bonds</option>
+                            <option value="precious_metals">Precious Metals</option>
+                            <option value="crypto">Cryptocurrency</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="holdings-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Current Price</th>
+                                <th>Market Value</th>
+                                <th>Gain/Loss</th>
+                                <th>% Change</th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdingsTableBody">
+                            <!-- Holdings will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Rebalancing View -->
+            <div id="rebalancingView" class="view">
+                <div class="rebalancing-header">
+                    <h2>AI Rebalancing Recommendations</h2>
+                    <button class="btn btn--primary" id="executeRebalancing">Execute Rebalancing</button>
+                </div>
+
+                <div class="rebalancing-grid">
+                    <!-- Current vs Target Allocation -->
+                    <div class="allocation-comparison">
+                        <h3>Current vs Target Allocation</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="rebalancingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Rebalancing Suggestions -->
+                    <div class="rebalancing-suggestions">
+                        <h3>Recommendations</h3>
+                        <div class="suggestion-list">
+                            <div class="suggestion-item reduce">
+                                <div class="suggestion-header">
+                                    <span class="suggestion-action">REDUCE</span>
+                                    <span class="suggestion-asset">Cryptocurrency</span>
+                                </div>
+                                <div class="suggestion-details">
+                                    <div>Current: 15.4% → Target: 5.0%</div>
+                                    <div class="suggestion-amount">Reduce by $1,462</div>
+                                    <div class="suggestion-impact">Impact: Lower portfolio volatility</div>
+                                </div>
+                            </div>
+
+                            <div class="suggestion-item reduce">
+                                <div class="suggestion-header">
+                                    <span class="suggestion-action">REDUCE</span>
+                                    <span class="suggestion-asset">ETFs</span>
+                                </div>
+                                <div class="suggestion-details">
+                                    <div>Current: 28.6% → Target: 25.0%</div>
+                                    <div class="suggestion-amount">Reduce by $506</div>
+                                    <div class="suggestion-impact">Impact: Improve diversification balance</div>
+                                </div>
+                            </div>
+
+                            <div class="suggestion-item increase">
+                                <div class="suggestion-header">
+                                    <span class="suggestion-action">INCREASE</span>
+                                    <span class="suggestion-asset">Bonds</span>
+                                </div>
+                                <div class="suggestion-details">
+                                    <div>Current: 10.5% → Target: 15.0%</div>
+                                    <div class="suggestion-amount">Increase by $632</div>
+                                    <div class="suggestion-impact">Impact: Enhanced portfolio stability</div>
+                                </div>
+                            </div>
+
+                            <div class="suggestion-item add">
+                                <div class="suggestion-header">
+                                    <span class="suggestion-action">ADD</span>
+                                    <span class="suggestion-asset">Commodities</span>
+                                </div>
+                                <div class="suggestion-details">
+                                    <div>Current: 0.0% → Target: 10.0%</div>
+                                    <div class="suggestion-amount">Add $1,404</div>
+                                    <div class="suggestion-impact">Impact: Inflation hedge and diversification</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div id="analyticsView" class="view">
+                <div class="analytics-header">
+                    <h2>Portfolio Analytics</h2>
+                    <div class="timeframe-selector">
+                        <button class="timeframe-btn" data-period="1W">1W</button>
+                        <button class="timeframe-btn active" data-period="1M">1M</button>
+                        <button class="timeframe-btn" data-period="3M">3M</button>
+                        <button class="timeframe-btn active" data-period="6M">6M</button>
+                        <button class="timeframe-btn" data-period="1Y">1Y</button>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <!-- Risk Metrics -->
+                    <div class="risk-metrics">
+                        <h3>Risk Analysis</h3>
+                        <div class="metric-item">
+                            <label>Portfolio Volatility</label>
+                            <div class="metric-value">12.4%</div>
+                        </div>
+                        <div class="metric-item">
+                            <label>Sharpe Ratio</label>
+                            <div class="metric-value">1.28</div>
+                        </div>
+                        <div class="metric-item">
+                            <label>Max Drawdown</label>
+                            <div class="metric-value negative">-5.8%</div>
+                        </div>
+                        <div class="metric-item">
+                            <label>Beta</label>
+                            <div class="metric-value">0.92</div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Analytics Chart -->
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Performance Analysis</h3>
+                        <canvas id="analyticsChart"></canvas>
+                    </div>
+
+                    <!-- Sector Diversification -->
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Sector Diversification</h3>
+                        <canvas id="sectorChart"></canvas>
+                    </div>
+
+                    <!-- Correlation Matrix -->
+                    <div class="correlation-matrix">
+                        <h3>Asset Correlation Matrix</h3>
+                        <div class="correlation-grid">
+                            <div class="correlation-item">
+                                <span>AAPL ↔ MSFT</span>
+                                <span class="correlation-value positive">0.74</span>
+                            </div>
+                            <div class="correlation-item">
+                                <span>BTC ↔ Stocks</span>
+                                <span class="correlation-value negative">-0.12</span>
+                            </div>
+                            <div class="correlation-item">
+                                <span>GOLD ↔ Bonds</span>
+                                <span class="correlation-value">0.31</span>
+                            </div>
+                            <div class="correlation-item">
+                                <span>VTI ↔ Market</span>
+                                <span class="correlation-value positive">0.89</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settingsView" class="view">
+                <div class="settings-header">
+                    <h2>Account Settings</h2>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-section">
+                        <h3>Investment Goals</h3>
+                        <div class="form-group">
+                            <label class="form-label">Primary Goal</label>
+                            <select class="form-control">
+                                <option value="long_term_growth" selected>Long-term Growth</option>
+                                <option value="income">Income Generation</option>
+                                <option value="preservation">Capital Preservation</option>
+                                <option value="balanced">Balanced Growth</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Investment Timeline</label>
+                            <select class="form-control">
+                                <option value="5_years">5 Years</option>
+                                <option value="10_years" selected>10 Years</option>
+                                <option value="15_years">15 Years</option>
+                                <option value="20_years">20+ Years</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Target Annual Return</label>
+                            <input type="number" class="form-control" value="8.5" step="0.1" min="0" max="20">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Risk Preferences</h3>
+                        <div class="form-group">
+                            <label class="form-label">Risk Tolerance</label>
+                            <select class="form-control">
+                                <option value="conservative">Conservative</option>
+                                <option value="moderate" selected>Moderate</option>
+                                <option value="aggressive">Aggressive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Auto-Rebalancing</label>
+                            <select class="form-control">
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly" selected>Quarterly</option>
+                                <option value="annually">Annually</option>
+                                <option value="manual">Manual Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Target Allocation</h3>
+                        <div class="allocation-sliders">
+                            <div class="slider-group">
+                                <label>Stocks: <span id="stocksValue">40%</span></label>
+                                <input type="range" id="stocksSlider" min="0" max="100" value="40" class="allocation-slider">
+                            </div>
+                            <div class="slider-group">
+                                <label>ETFs: <span id="etfsValue">25%</span></label>
+                                <input type="range" id="etfsSlider" min="0" max="100" value="25" class="allocation-slider">
+                            </div>
+                            <div class="slider-group">
+                                <label>Bonds: <span id="bondsValue">15%</span></label>
+                                <input type="range" id="bondsSlider" min="0" max="100" value="15" class="allocation-slider">
+                            </div>
+                            <div class="slider-group">
+                                <label>Commodities: <span id="commoditiesValue">10%</span></label>
+                                <input type="range" id="commoditiesSlider" min="0" max="100" value="10" class="allocation-slider">
+                            </div>
+                            <div class="slider-group">
+                                <label>Precious Metals: <span id="preciousMetalsValue">5%</span></label>
+                                <input type="range" id="preciousMetalsSlider" min="0" max="100" value="5" class="allocation-slider">
+                            </div>
+                            <div class="slider-group">
+                                <label>Crypto: <span id="cryptoValue">5%</span></label>
+                                <input type="range" id="cryptoSlider" min="0" max="100" value="5" class="allocation-slider">
+                            </div>
+                        </div>
+                        <div class="allocation-total">
+                            Total: <span id="allocationTotal">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button class="btn btn--primary">Save Settings</button>
+                        <button class="btn btn--outline">Reset to Defaults</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
