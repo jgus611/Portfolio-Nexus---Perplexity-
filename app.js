@@ -257,10 +257,12 @@ const chartColors = ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F', '#DB
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM Content Loaded, initializing app...');
   initializeApp();
 });
 
 function initializeApp() {
+  console.log('Setting up login form...');
   setupLoginForm();
   setupNavigation();
   setupPortfolioSearch();
@@ -270,6 +272,7 @@ function initializeApp() {
   
   // Initialize charts when dashboard is first loaded
   setTimeout(() => {
+    console.log('Initializing charts with delay...');
     initializeCharts();
   }, 100);
 }
@@ -277,14 +280,42 @@ function initializeApp() {
 // Login functionality
 function setupLoginForm() {
   const loginForm = document.getElementById('loginForm');
+  const signInButton = document.querySelector('button[type="submit"]');
   
-  loginForm.addEventListener('submit', function(e) {
+  if (!loginForm) {
+    console.error('Login form not found!');
+    return;
+  }
+  
+  if (!signInButton) {
+    console.error('Sign in button not found!');
+    return;
+  }
+  
+  console.log('Login form found, setting up event listener...');
+  
+  // Add both form submit and button click handlers for redundancy
+  loginForm.addEventListener('submit', handleLogin);
+  signInButton.addEventListener('click', function(e) {
+    console.log('Button clicked directly!');
     e.preventDefault();
+    handleLogin(e);
+  });
+  
+  function handleLogin(e) {
+    e.preventDefault();
+    console.log('Login form submitted!');
     
     // Simulate login process
     const loginPage = document.getElementById('loginPage');
     const app = document.getElementById('app');
     
+    if (!loginPage || !app) {
+      console.error('Required elements not found:', { loginPage, app });
+      return;
+    }
+    
+    console.log('Starting login transition...');
     loginPage.style.opacity = '0';
     setTimeout(() => {
       loginPage.classList.add('hidden');
@@ -292,11 +323,12 @@ function setupLoginForm() {
       
       // Initialize charts and data after app is shown
       setTimeout(() => {
+        console.log('Initializing charts and data...');
         initializeCharts();
         populateHoldingsTable();
       }, 100);
     }, 300);
-  });
+  }
 }
 
 // Navigation functionality
