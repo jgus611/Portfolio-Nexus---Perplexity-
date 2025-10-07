@@ -1076,6 +1076,47 @@ select.form-control {
   line-height: 1.5;
 }
 
+.insight-recommendation {
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin-top: var(--space-8);
+  padding: var(--space-8);
+  background: var(--color-bg-3);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-accent);
+}
+
+.insight-confidence {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xs);
+  margin-top: var(--space-4);
+  font-style: italic;
+}
+
+.risk-assessment {
+  background: linear-gradient(135deg, var(--color-bg-1), var(--color-bg-3));
+  border: 2px solid var(--color-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.risk-assessment::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-teal-400));
+}
+
+.insight-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
 /* Recent Transactions */
 .recent-transactions {
   background: var(--color-surface);

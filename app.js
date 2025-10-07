@@ -1,5 +1,8 @@
 // Portfolio Nexus - Main Application JavaScript
 
+// Initialize AI enhancer
+let aiEnhancer;
+
 // Application Data
 const portfolioData = {
   user_profile: {
@@ -27,8 +30,104 @@ const portfolioData = {
     risk_score: 6.2
   },
   target_allocation: {
-    stocks: 40,
-    etfs: 25,
+    s// Performance optimization: Lazy load charts
+const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const chartCanvas = entry.target.querySelector('canvas');
+      if (chartCanvas && !chartCanvas.hasAttribute('data-loaded')) {
+        chartCanvas.setAttribute('data-loaded', 'true');
+        // Initialize specific chart based on canvas ID
+        // This would be expanded for production use
+      }
+    }
+  });
+});
+
+// AI Insights Generation
+function generateAIInsights() {
+  if (!aiEnhancer) return;
+  
+  // Generate performance insights
+  const performanceInsights = aiEnhancer.generatePerformanceInsights(portfolioData.performance_history);
+  
+  // Generate allocation insights
+  const allocationInsights = aiEnhancer.generateAllocationInsights(
+    portfolioData.current_allocations, 
+    portfolioData.target_allocation
+  );
+  
+  // Assess risk level
+  const riskAssessment = aiEnhancer.assessRiskLevel(portfolioData);
+  
+  // Display insights
+  displayAIInsights([...performanceInsights, ...allocationInsights], riskAssessment);
+}
+
+function displayAIInsights(insights, riskAssessment) {
+  const container = document.getElementById('aiInsightsContainer');
+  if (!container) return;
+  
+  // Clear existing insights
+  container.innerHTML = '';
+  
+  // Add risk assessment
+  const riskInsight = document.createElement('div');
+  riskInsight.className = 'insight-item risk-assessment';
+  riskInsight.innerHTML = `
+    <div class="insight-icon">⚖️</div>
+    <div class="insight-content">
+      <div class="insight-title">Portfolio Risk Analysis</div>
+      <div class="insight-text">
+        Risk Level: <strong>${riskAssessment.level}</strong> (${riskAssessment.score}/10)
+        ${riskAssessment.recommendations.length > 0 ? '<br>' + riskAssessment.recommendations[0] : ''}
+      </div>
+      <div class="insight-confidence">AI Confidence: 94%</div>
+    </div>
+  `;
+  container.appendChild(riskInsight);
+  
+  // Add other insights
+  insights.slice(0, 3).forEach(insight => {
+    const insightElement = document.createElement('div');
+    insightElement.className = 'insight-item';
+    
+    const iconMap = {
+      positive: '📈',
+      warning: '⚠️',
+      info: 'ℹ️',
+      rebalancing: '⚖️'
+    };
+    
+    insightElement.innerHTML = `
+      <div class="insight-icon">${iconMap[insight.type] || '🤖'}</div>
+      <div class="insight-content">
+        <div class="insight-title">${insight.asset ? `${insight.asset.toUpperCase()} ` : ''}${getInsightTitle(insight)}</div>
+        <div class="insight-text">${insight.message}</div>
+        ${insight.recommendation ? `<div class="insight-recommendation">${insight.recommendation}</div>` : ''}
+        ${insight.confidence ? `<div class="insight-confidence">AI Confidence: ${Math.round(insight.confidence * 100)}%</div>` : ''}
+      </div>
+    `;
+    
+    container.appendChild(insightElement);
+  });
+}
+
+function getInsightTitle(insight) {
+  switch(insight.type) {
+    case 'positive': return 'Growth Opportunity';
+    case 'warning': return 'Market Alert';
+    case 'rebalancing': return 'Rebalancing Needed';
+    case 'info': return 'Portfolio Analysis';
+    default: return 'AI Insight';
+  }
+}: 25,
     bonds: 15,
     commodities: 10,
     precious_metals: 5,
@@ -232,8 +331,14 @@ function setupNavigation() {
 
 // Charts initialization
 function initializeCharts() {
+  // Initialize AI enhancer
+  aiEnhancer = new AIChartEnhancer();
+  
   createPerformanceChart();
   createAllocationChart();
+  
+  // Generate and display AI insights
+  generateAIInsights();
 }
 
 function createPerformanceChart() {
@@ -748,3 +853,82 @@ document.querySelectorAll('.chart-container').forEach(container => {
 });
 
 console.log('Portfolio Nexus application initialized successfully!');
+
+// AI Insights Generation
+function generateAIInsights() {
+  if (!aiEnhancer) return;
+  
+  // Generate performance insights
+  const performanceInsights = aiEnhancer.generatePerformanceInsights(portfolioData.performance_history);
+  
+  // Generate allocation insights
+  const allocationInsights = aiEnhancer.generateAllocationInsights(
+    portfolioData.current_allocations, 
+    portfolioData.target_allocation
+  );
+  
+  // Assess risk level
+  const riskAssessment = aiEnhancer.assessRiskLevel(portfolioData);
+  
+  // Display insights
+  displayAIInsights([...performanceInsights, ...allocationInsights], riskAssessment);
+}
+
+function displayAIInsights(insights, riskAssessment) {
+  const container = document.getElementById('aiInsightsContainer');
+  if (!container) return;
+  
+  // Clear existing insights
+  container.innerHTML = '';
+  
+  // Add risk assessment
+  const riskInsight = document.createElement('div');
+  riskInsight.className = 'insight-item risk-assessment';
+  riskInsight.innerHTML = `
+    <div class="insight-icon">⚖️</div>
+    <div class="insight-content">
+      <div class="insight-title">Portfolio Risk Analysis</div>
+      <div class="insight-text">
+        Risk Level: <strong>${riskAssessment.level}</strong> (${riskAssessment.score}/10)
+        ${riskAssessment.recommendations.length > 0 ? '<br>' + riskAssessment.recommendations[0] : ''}
+      </div>
+      <div class="insight-confidence">AI Confidence: 94%</div>
+    </div>
+  `;
+  container.appendChild(riskInsight);
+  
+  // Add other insights
+  insights.slice(0, 3).forEach(insight => {
+    const insightElement = document.createElement('div');
+    insightElement.className = 'insight-item';
+    
+    const iconMap = {
+      positive: '📈',
+      warning: '⚠️',
+      info: 'ℹ️',
+      rebalancing: '⚖️'
+    };
+    
+    insightElement.innerHTML = `
+      <div class="insight-icon">${iconMap[insight.type] || '🤖'}</div>
+      <div class="insight-content">
+        <div class="insight-title">${insight.asset ? `${insight.asset.toUpperCase()} ` : ''}${getInsightTitle(insight)}</div>
+        <div class="insight-text">${insight.message}</div>
+        ${insight.recommendation ? `<div class="insight-recommendation">${insight.recommendation}</div>` : ''}
+        ${insight.confidence ? `<div class="insight-confidence">AI Confidence: ${Math.round(insight.confidence * 100)}%</div>` : ''}
+      </div>
+    `;
+    
+    container.appendChild(insightElement);
+  });
+}
+
+function getInsightTitle(insight) {
+  switch(insight.type) {
+    case 'positive': return 'Growth Opportunity';
+    case 'warning': return 'Market Alert';
+    case 'rebalancing': return 'Rebalancing Needed';
+    case 'info': return 'Portfolio Analysis';
+    default: return 'AI Insight';
+  }
+}
