@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="ai-chart-enhancer.js"></script>
+    <script src="advanced-ai-engine.js"></script>
 </head>
 <body>
     <!-- Login Page -->
@@ -27,7 +28,7 @@
                         <label class="form-label">Password</label>
                         <input type="password" class="form-control" value="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn--primary btn--full-width">Sign In</button>
+                    <button type="submit" class="btn btn--primary btn--full-width" onclick="console.log('Direct onclick works!')">Sign In</button>
                 </form>
             </div>
         </div>
@@ -124,6 +125,43 @@
                             <div class="insight-content">
                                 <div class="insight-title">Market Opportunity</div>
                                 <div class="insight-text">Bonds are undervalued. Increasing allocation by $632 could enhance stability.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced AI Analytics -->
+                    <div class="advanced-ai-analytics">
+                        <h3>🧠 Advanced AI Analytics</h3>
+                        
+                        <!-- AI Trading Signals -->
+                        <div class="ai-section">
+                            <h4>📊 AI Trading Signals</h4>
+                            <div id="tradingSignalsContainer" class="signals-grid">
+                                <!-- Trading signals will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- ML Price Predictions -->
+                        <div class="ai-section">
+                            <h4>🔮 ML Price Predictions</h4>
+                            <div id="pricePredictionsContainer" class="predictions-grid">
+                                <!-- Price predictions will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio Optimization -->
+                        <div class="ai-section">
+                            <h4>⚙️ Portfolio Optimization</h4>
+                            <div id="optimizationContainer" class="optimization-panel">
+                                <!-- Optimization results will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- Stress Test Results -->
+                        <div class="ai-section">
+                            <h4>⚡ Stress Test Analysis</h4>
+                            <div id="stressTestContainer" class="stress-test-panel">
+                                <!-- Stress test results will be populated by JavaScript -->
                             </div>
                         </div>
                     </div>
@@ -446,5 +484,26 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Immediate test script
+        console.log('=== IMMEDIATE TEST: JavaScript is running ===');
+        
+        // Test if DOM elements exist
+        setTimeout(() => {
+            console.log('=== DOM TEST ===');
+            const loginForm = document.getElementById('loginForm');
+            const signInButton = document.querySelector('button[type="submit"]');
+            console.log('Login form found:', !!loginForm);
+            console.log('Sign in button found:', !!signInButton);
+            
+            if (signInButton) {
+                console.log('Adding direct test click handler...');
+                signInButton.addEventListener('click', function(e) {
+                    console.log('=== BUTTON CLICKED - TEST HANDLER ===');
+                    alert('Button click detected!');
+                });
+            }
+        }, 500);
+    </script>
 </body>
 </html>

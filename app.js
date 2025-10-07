@@ -1,8 +1,9 @@
 // Portfolio Nexus - Main Application JavaScript
 console.log('=== APP.JS LOADED SUCCESSFULLY ===');
 
-// Initialize AI enhancer
+// Initialize AI enhancer and advanced AI engine
 let aiEnhancer;
+let advancedAI;
 
 // Application Data
 const portfolioData = {
@@ -272,8 +273,32 @@ function setupNavigation() {
 
 // Charts initialization
 function initializeCharts() {
+  console.log('=== INITIALIZING CHARTS AND AI ===');
+  
+  // Initialize basic charts
   createPerformanceChart();
   createAllocationChart();
+  
+  // Initialize advanced AI features
+  initializeAdvancedAI();
+}
+
+function initializeAdvancedAI() {
+  console.log('🧠 Initializing Advanced AI Engine...');
+  
+  // Initialize AI engines
+  if (typeof AIChartEnhancer !== 'undefined') {
+    aiEnhancer = new AIChartEnhancer();
+  }
+  
+  if (typeof AdvancedAIEngine !== 'undefined') {
+    advancedAI = new AdvancedAIEngine();
+    
+    // Generate advanced AI insights
+    setTimeout(() => {
+      generateAdvancedAIInsights();
+    }, 500);
+  }
 }
 
 function createPerformanceChart() {
@@ -788,3 +813,252 @@ document.querySelectorAll('.chart-container').forEach(container => {
 });
 
 console.log('Portfolio Nexus application initialized successfully!');
+
+// Advanced AI Features Implementation
+// ===================================
+
+function generateAdvancedAIInsights() {
+  console.log('🚀 Generating Advanced AI Insights...');
+  
+  if (!advancedAI) {
+    console.warn('Advanced AI Engine not available');
+    return;
+  }
+  
+  // Generate trading signals
+  generateTradingSignals();
+  
+  // Generate price predictions
+  generatePricePredictions();
+  
+  // Generate portfolio optimization
+  generatePortfolioOptimization();
+  
+  // Generate stress test analysis
+  generateStressTestAnalysis();
+}
+
+function generateTradingSignals() {
+  console.log('📊 Generating AI Trading Signals...');
+  
+  const signals = advancedAI.generateTradingSignals(portfolioData);
+  const container = document.getElementById('tradingSignalsContainer');
+  
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  signals.slice(0, 5).forEach(signal => {
+    const signalElement = document.createElement('div');
+    signalElement.className = `signal-card ${signal.action.toLowerCase()}`;
+    
+    const actionIcon = {
+      'BUY': '📈',
+      'SELL': '📉', 
+      'HOLD': '⏸️'
+    };
+    
+    signalElement.innerHTML = `
+      <div class="signal-header">
+        <span class="signal-icon">${actionIcon[signal.action]}</span>
+        <span class="signal-asset">${signal.asset}</span>
+        <span class="signal-action ${signal.action.toLowerCase()}">${signal.action}</span>
+      </div>
+      <div class="signal-strength">
+        <div class="strength-label">Strength:</div>
+        <div class="strength-bar">
+          <div class="strength-fill" style="width: ${signal.strength * 10}%"></div>
+        </div>
+        <span class="strength-value">${signal.strength.toFixed(1)}/10</span>
+      </div>
+      <div class="signal-reasoning">${signal.reasoning}</div>
+      <div class="signal-meta">
+        <span class="confidence">Confidence: ${Math.round(signal.confidence * 100)}%</span>
+        <span class="timeframe">Timeframe: ${signal.timeframe}</span>
+      </div>
+    `;
+    
+    container.appendChild(signalElement);
+  });
+}
+
+function generatePricePredictions() {
+  console.log('🔮 Generating ML Price Predictions...');
+  
+  const assetData = {};
+  portfolioData.holdings.forEach(holding => {
+    assetData[holding.symbol] = {
+      currentPrice: holding.current_price,
+      historicalData: generateMockHistoricalData(holding.current_price)
+    };
+  });
+  
+  const predictions = advancedAI.predictPriceTrends(assetData, 30);
+  const container = document.getElementById('pricePredictionsContainer');
+  
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  Object.entries(predictions).slice(0, 4).forEach(([symbol, prediction]) => {
+    const predictionElement = document.createElement('div');
+    predictionElement.className = 'prediction-card';
+    
+    const changePercent = ((prediction.predictedPrice - prediction.currentPrice) / prediction.currentPrice * 100);
+    const trendClass = changePercent > 0 ? 'positive' : 'negative';
+    
+    predictionElement.innerHTML = `
+      <div class="prediction-header">
+        <span class="prediction-symbol">${symbol}</span>
+        <span class="prediction-trend ${trendClass}">${prediction.trend}</span>
+      </div>
+      <div class="prediction-prices">
+        <div class="current-price">
+          <span class="label">Current:</span>
+          <span class="price">$${prediction.currentPrice.toFixed(2)}</span>
+        </div>
+        <div class="predicted-price">
+          <span class="label">30-day target:</span>
+          <span class="price ${trendClass}">$${prediction.predictedPrice.toFixed(2)}</span>
+        </div>
+      </div>
+      <div class="prediction-change ${trendClass}">
+        ${changePercent > 0 ? '+' : ''}${changePercent.toFixed(1)}%
+      </div>
+      <div class="prediction-confidence">
+        ML Confidence: ${Math.round(prediction.confidence * 100)}%
+      </div>
+      <div class="prediction-risk">
+        Risk Level: ${prediction.riskLevel}
+      </div>
+    `;
+    
+    container.appendChild(predictionElement);
+  });
+}
+
+function generatePortfolioOptimization() {
+  console.log('⚙️ Generating Portfolio Optimization...');
+  
+  const expectedReturns = {};
+  portfolioData.holdings.forEach(holding => {
+    expectedReturns[holding.symbol] = 0.05 + Math.random() * 0.15; // 5-20% expected return
+  });
+  
+  const optimization = advancedAI.optimizePortfolioMPT(expectedReturns, portfolioData.user_profile.risk_appetite);
+  const container = document.getElementById('optimizationContainer');
+  
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div class="optimization-summary">
+      <h5>🎯 Optimization Results (${optimization.method})</h5>
+      <div class="optimization-metrics">
+        <div class="metric">
+          <span class="metric-label">Expected Return:</span>
+          <span class="metric-value positive">${(optimization.expectedReturn * 100).toFixed(1)}%</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Portfolio Risk:</span>
+          <span class="metric-value">${(optimization.risk * 100).toFixed(1)}%</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Sharpe Ratio:</span>
+          <span class="metric-value">${optimization.sharpeRatio.toFixed(2)}</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">AI Confidence:</span>
+          <span class="metric-value">${Math.round(optimization.confidence * 100)}%</span>
+        </div>
+      </div>
+    </div>
+    <div class="optimization-allocation">
+      <h6>📊 Optimal Allocation:</h6>
+      <div class="allocation-grid">
+        ${Object.entries(optimization.allocation).map(([asset, weight]) => `
+          <div class="allocation-item">
+            <span class="asset-name">${asset}</span>
+            <span class="asset-weight">${(weight * 100).toFixed(1)}%</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function generateStressTestAnalysis() {
+  console.log('⚡ Generating Stress Test Analysis...');
+  
+  const scenarios = {
+    'Market Crash': {
+      marketDrop: -0.3,
+      volatilityIncrease: 2.0,
+      probability: 0.05
+    },
+    'Interest Rate Spike': {
+      rateIncrease: 0.02,
+      bondImpact: -0.15,
+      probability: 0.15
+    },
+    'Inflation Surge': {
+      inflationIncrease: 0.04,
+      realReturnImpact: -0.06,
+      probability: 0.20
+    },
+    'Economic Recession': {
+      gdpDrop: -0.02,
+      unemploymentRise: 0.03,
+      probability: 0.10
+    }
+  };
+  
+  const stressTest = advancedAI.stressTestPortfolio(portfolioData, scenarios);
+  const container = document.getElementById('stressTestContainer');
+  
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div class="stress-test-summary">
+      <h5>🛡️ Portfolio Stress Test Results</h5>
+      <div class="overall-risk ${stressTest.overallRisk > 0.3 ? 'high' : stressTest.overallRisk > 0.15 ? 'medium' : 'low'}">
+        Overall Risk Level: ${(stressTest.overallRisk * 100).toFixed(1)}%
+      </div>
+    </div>
+    <div class="stress-scenarios">
+      ${Object.entries(stressTest.results).map(([scenario, result]) => `
+        <div class="scenario-card">
+          <div class="scenario-name">${scenario}</div>
+          <div class="scenario-impact">
+            <span class="impact-label">Portfolio Impact:</span>
+            <span class="impact-value ${result.portfolioValue > 0 ? 'positive' : 'negative'}">
+              ${result.portfolioValue > 0 ? '+' : ''}${(result.portfolioValue * 100).toFixed(1)}%
+            </span>
+          </div>
+          <div class="scenario-probability">
+            Probability: ${(result.probability * 100).toFixed(0)}%
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="stress-recommendations">
+      <h6>💡 Risk Mitigation Recommendations:</h6>
+      <ul>
+        ${stressTest.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+// Helper function to generate mock historical data
+function generateMockHistoricalData(currentPrice) {
+  const data = [];
+  let price = currentPrice;
+  
+  for (let i = 30; i >= 0; i--) {
+    const change = (Math.random() - 0.5) * 0.04; // ±2% daily change
+    price = price * (1 + change);
+    data.push(price);
+  }
+  
+  return data.reverse();
+}
