@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Debug Test - Portfolio Nexus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .result {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid #ccc;
+        }
+        .success { border-left-color: #22c55e; background: #f0fdf4; }
+        .error { border-left-color: #ef4444; background: #fef2f2; }
+        .warning { border-left-color: #f59e0b; background: #fffbeb; }
+        .info { border-left-color: #3b82f6; background: #eff6ff; }
+        .console {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        button {
+            background: #1FB8CD;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #17a2b8; }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Enterprise Debug Test - Deep Dive</h1>
+    <p>Let's diagnose exactly why the enterprise instances aren't being created.</p>
+    
+    <div class="test-section">
+        <h3>🧪 Test Controls</h3>
+        <button onclick="runStepByStepTest()">🔬 Step-by-Step Test</button>
+        <button onclick="testConstructorErrors()">⚠️ Test Constructor Errors</button>
+        <button onclick="testMinimalInstances()">🎯 Minimal Instance Test</button>
+        <button onclick="clearResults()">🗑️ Clear</button>
+    </div>
+
+    <div id="results"></div>
+    <div class="console" id="console">
+        > Enterprise Debug Test Ready
+        > This will help identify the exact failure point
+    </div>
+
+    <!-- Load scripts with explicit error handling -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Global error catcher
+        window.addEventListener('error', function(e) {
+            log(`❌ Global Error: ${e.message} in ${e.filename}:${e.lineno}`, 'error');
+        });
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const console = document.getElementById('console');
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            console.innerHTML += `\n[${timestamp}] ${prefix} ${message}`;
+            console.scrollTop = console.scrollHeight;
+            
+            // Also add to results
+            const results = document.getElementById('results');
+            const result = document.createElement('div');
+            result.className = `test-section`;
+            result.innerHTML = `<div class="result ${type}"><strong>[${timestamp}]</strong> ${message}</div>`;
+            results.appendChild(result);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('console').innerHTML = '> Console cleared';
+        }
+
+        // Load scripts one by one with detailed error reporting
+        function loadScriptWithDetails(src, callback) {
+            log(`📁 Loading ${src}...`, 'info');
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                log(`✅ ${src} loaded successfully`, 'success');
+                callback(null);
+            };
+            script.onerror = (e) => {
+                log(`❌ Failed to load ${src}: ${e.message || 'Unknown error'}`, 'error');
+                callback(new Error(`Failed to load ${src}`));
+            };
+            document.head.appendChild(script);
+        }
+
+        async function runStepByStepTest() {
+            log('🔬 Starting Step-by-Step Analysis...', 'info');
+            clearResults();
+            
+            // Step 1: Load AI enhancer
+            await loadScriptAsync('ai-chart-enhancer.js');
+            
+            // Step 2: Load advanced AI
+            await loadScriptAsync('advanced-ai-engine.js');
+            
+            // Step 3: Load enterprise AI
+            await loadScriptAsync('enterprise-ai-engine.js');
+            
+            // Step 4: Load reporting engine
+            await loadScriptAsync('advanced-reporting-engine.js');
+            
+            // Step 5: Load main app
+            await loadScriptAsync('app.js');
+            
+            // Step 6: Test class availability
+            await delay(1000);
+            testClassAvailability();
+            
+            // Step 7: Test manual instantiation
+            await delay(500);
+            testManualInstantiation();
+        }
+
+        function loadScriptAsync(src) {
+            return new Promise((resolve) => {
+                loadScriptWithDetails(src, (error) => {
+                    if (error) {
+                        log(`❌ Script loading failed: ${src}`, 'error');
+                    }
+                    resolve(); // Continue even if one fails
+                });
+            });
+        }
+
+        function testClassAvailability() {
+            log('🔍 Testing Class Availability...', 'info');
+            
+            const classes = [
+                { name: 'Chart', check: () => typeof Chart !== 'undefined' },
+                { name: 'AIChartEnhancer', check: () => typeof AIChartEnhancer !== 'undefined' },
+                { name: 'AdvancedAIEngine', check: () => typeof AdvancedAIEngine !== 'undefined' },
+                { name: 'EnterpriseAIEngine', check: () => typeof EnterpriseAIEngine !== 'undefined' },
+                { name: 'AdvancedReportingEngine', check: () => typeof AdvancedReportingEngine !== 'undefined' }
+            ];
+            
+            classes.forEach(cls => {
+                try {
+                    const available = cls.check();
+                    log(`${cls.name}: ${available ? 'AVAILABLE' : 'NOT FOUND'}`, available ? 'success' : 'error');
+                } catch (e) {
+                    log(`${cls.name}: ERROR - ${e.message}`, 'error');
+                }
+            });
+        }
+
+        async function testConstructorErrors() {
+            log('⚠️ Testing Constructor Errors...', 'info');
+            clearResults();
+            
+            // Wait for scripts to load
+            await delay(2000);
+            
+            // Test EnterpriseAIEngine constructor
+            log('Testing EnterpriseAIEngine constructor...', 'info');
+            try {
+                if (typeof EnterpriseAIEngine !== 'undefined') {
+                    log('EnterpriseAIEngine class found, attempting instantiation...', 'info');
+                    const enterprise = new EnterpriseAIEngine();
+                    log('✅ EnterpriseAIEngine created successfully!', 'success');
+                    log(`Instance type: ${typeof enterprise}`, 'info');
+                    log(`Instance constructor: ${enterprise.constructor.name}`, 'info');
+                } else {
+                    log('❌ EnterpriseAIEngine class not found', 'error');
+                }
+            } catch (e) {
+                log(`❌ EnterpriseAIEngine constructor error: ${e.message}`, 'error');
+                log(`Error stack: ${e.stack}`, 'error');
+            }
+            
+            await delay(500);
+            
+            // Test AdvancedReportingEngine constructor
+            log('Testing AdvancedReportingEngine constructor...', 'info');
+            try {
+                if (typeof AdvancedReportingEngine !== 'undefined') {
+                    log('AdvancedReportingEngine class found, attempting instantiation...', 'info');
+                    const reporting = new AdvancedReportingEngine();
+                    log('✅ AdvancedReportingEngine created successfully!', 'success');
+                    log(`Instance type: ${typeof reporting}`, 'info');
+                    log(`Instance constructor: ${reporting.constructor.name}`, 'info');
+                } else {
+                    log('❌ AdvancedReportingEngine class not found', 'error');
+                }
+            } catch (e) {
+                log(`❌ AdvancedReportingEngine constructor error: ${e.message}`, 'error');
+                log(`Error stack: ${e.stack}`, 'error');
+            }
+        }
+
+        async function testMinimalInstances() {
+            log('🎯 Testing Minimal Instance Creation...', 'info');
+            clearResults();
+            
+            await delay(2000);
+            
+            // Try creating minimal versions
+            try {
+                log('Attempting direct window assignment...', 'info');
+                
+                if (typeof EnterpriseAIEngine !== 'undefined') {
+                    window.enterpriseAI = new EnterpriseAIEngine();
+                    log('✅ window.enterpriseAI assigned', 'success');
+                } else {
+                    log('❌ EnterpriseAIEngine not available for direct assignment', 'error');
+                }
+                
+                if (typeof AdvancedReportingEngine !== 'undefined') {
+                    window.reportingEngine = new AdvancedReportingEngine();
+                    log('✅ window.reportingEngine assigned', 'success');
+                } else {
+                    log('❌ AdvancedReportingEngine not available for direct assignment', 'error');
+                }
+                
+                await delay(500);
+                
+                // Verify assignments
+                const enterpriseCheck = window.enterpriseAI instanceof EnterpriseAIEngine;
+                const reportingCheck = window.reportingEngine instanceof AdvancedReportingEngine;
+                
+                log(`Final verification:`, 'info');
+                log(`- window.enterpriseAI: ${enterpriseCheck ? 'SUCCESS' : 'FAILED'}`, enterpriseCheck ? 'success' : 'error');
+                log(`- window.reportingEngine: ${reportingCheck ? 'SUCCESS' : 'FAILED'}`, reportingCheck ? 'success' : 'error');
+                
+                if (enterpriseCheck && reportingCheck) {
+                    log('🎉 Minimal instance creation SUCCESSFUL!', 'success');
+                } else {
+                    log('❌ Minimal instance creation FAILED', 'error');
+                }
+                
+            } catch (e) {
+                log(`❌ Minimal instance creation error: ${e.message}`, 'error');
+                log(`Error details: ${e.stack}`, 'error');
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Auto-run basic test on load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                log('🔍 Enterprise Debug Test Ready', 'info');
+                log('Click "Step-by-Step Test" to begin detailed analysis', 'info');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

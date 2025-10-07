@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 3 Enterprise Features Test - Portfolio Nexus</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .test-dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--color-background, #f5f5f5);
+            min-height: 100vh;
+        }
+        .test-header {
+            background: var(--color-surface, white);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: var(--color-surface, white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-section h3 {
+            color: var(--color-primary, #1FB8CD);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-test {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: var(--color-background, #f8f9fa);
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+        }
+        .feature-test.passed {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .feature-test.failed {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .feature-test.testing {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .test-status {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .test-status.passed { background: #22c55e; color: white; }
+        .test-status.failed { background: #ef4444; color: white; }
+        .test-status.testing { background: #f59e0b; color: white; }
+        .test-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .test-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .test-btn.primary {
+            background: var(--color-primary, #1FB8CD);
+            color: white;
+        }
+        .test-btn.secondary {
+            background: #6b7280;
+            color: white;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .results-summary {
+            background: var(--color-surface, white);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-dashboard">
+        <div class="test-header">
+            <h1>🏢 Portfolio Nexus - Phase 3 Enterprise Testing</h1>
+            <p>Comprehensive testing suite for Reports, Risk Management, and ESG features</p>
+            <div class="test-actions">
+                <button class="test-btn primary" onclick="runPhase3Tests()">🧪 Run All Tests</button>
+                <button class="test-btn secondary" onclick="window.open('/', '_blank')">🚀 Open Portfolio Nexus</button>
+                <button class="test-btn secondary" onclick="exportTestResults()">📊 Export Results</button>
+            </div>
+        </div>
+
+        <div class="test-grid">
+            <!-- Enterprise Engines Test -->
+            <div class="test-section">
+                <h3>🏢 Enterprise AI Engine</h3>
+                <div id="enterpriseTests">
+                    <div class="feature-test testing" data-test="enterpriseAI">
+                        <span>EnterpriseAIEngine Class</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="reportingEngine">
+                        <span>AdvancedReportingEngine Class</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="initialization">
+                        <span>Enterprise Features Init</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Test -->
+            <div class="test-section">
+                <h3>📊 Reports System</h3>
+                <div id="reportsTests">
+                    <div class="feature-test testing" data-test="reportsView">
+                        <span>Reports View DOM</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="reportGeneration">
+                        <span>Report Generation</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="reportTypes">
+                        <span>Multiple Report Types</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="exportFormats">
+                        <span>Export Formats</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Management Test -->
+            <div class="test-section">
+                <h3>🛡️ Risk Management</h3>
+                <div id="riskTests">
+                    <div class="feature-test testing" data-test="riskView">
+                        <span>Risk View DOM</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="riskGauge">
+                        <span>Risk Gauge Chart</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="stressTesting">
+                        <span>Stress Testing</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="riskMetrics">
+                        <span>Risk Metrics Calculation</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESG Features Test -->
+            <div class="test-section">
+                <h3>🌱 ESG & Sustainability</h3>
+                <div id="esgTests">
+                    <div class="feature-test testing" data-test="esgView">
+                        <span>ESG View DOM</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="esgScoring">
+                        <span>ESG Score Calculation</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="sdgAlignment">
+                        <span>UN SDG Alignment</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="impactChart">
+                        <span>Impact Visualization</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Test -->
+            <div class="test-section">
+                <h3>🧭 Navigation System</h3>
+                <div id="navigationTests">
+                    <div class="feature-test testing" data-test="navButtons">
+                        <span>Navigation Buttons (8)</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="viewSwitching">
+                        <span>View Switching</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="viewInit">
+                        <span>View Initialization</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI/UX Test -->
+            <div class="test-section">
+                <h3>🎨 UI & Experience</h3>
+                <div id="uiTests">
+                    <div class="feature-test testing" data-test="cssLoading">
+                        <span>Enterprise CSS Loading</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="responsive">
+                        <span>Responsive Design</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                    <div class="feature-test testing" data-test="animations">
+                        <span>Animations & Transitions</span>
+                        <span class="test-status testing">TESTING</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-summary">
+            <h2>📊 Test Results Summary</h2>
+            <div id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Click "Run All Tests" to begin comprehensive testing</p>
+            </div>
+            <div id="finalResults" style="display: none;">
+                <h3 id="finalStatus">🎯 Test Complete</h3>
+                <p id="finalSummary">Results will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Portfolio Nexus Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="ai-chart-enhancer.js"></script>
+    <script src="advanced-ai-engine.js"></script>
+    <script src="enterprise-ai-engine.js"></script>
+    <script src="advanced-reporting-engine.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Portfolio data for testing
+        const portfolioData = {
+            portfolio_metrics: {
+                total_portfolio_value: 14041.40,
+                overall_return_percent: 4.01,
+                risk_score: 6.2
+            },
+            holdings: [],
+            user_profile: {
+                name: "Test User",
+                risk_appetite: "moderate"
+            }
+        };
+
+        let testResults = {};
+        let currentTestIndex = 0;
+        let totalTests = 0;
+
+        async function runPhase3Tests() {
+            console.log('🧪 Starting Phase 3 Enterprise Feature Testing...');
+            
+            // Reset UI
+            resetTestUI();
+            
+            // Add error handling for script loading
+            window.addEventListener('error', function(e) {
+                console.error('Script loading error:', e.filename, e.message);
+                updateProgress(0, `Error loading: ${e.filename}`);
+            });
+            
+            // Initialize enterprise features
+            try {
+                if (typeof initializeEnterpriseFeatures === 'function') {
+                    console.log('✅ initializeEnterpriseFeatures found, calling...');
+                    initializeEnterpriseFeatures();
+                } else {
+                    console.log('⚠️ initializeEnterpriseFeatures not found');
+                }
+            } catch (e) {
+                console.log('❌ Enterprise features init error:', e.message);
+            }
+
+            // Run test categories
+            await testEnterpriseEngines();
+            await testReportsSystem();
+            await testRiskManagement();
+            await testESGFeatures();
+            await testNavigationSystem();
+            await testUIExperience();
+
+            // Display final results
+            displayFinalResults();
+        }
+
+        function resetTestUI() {
+            const allTests = document.querySelectorAll('.feature-test');
+            allTests.forEach(test => {
+                test.className = 'feature-test testing';
+                const status = test.querySelector('.test-status');
+                status.className = 'test-status testing';
+                status.textContent = 'TESTING';
+            });
+            
+            document.getElementById('finalResults').style.display = 'none';
+            updateProgress(0, 'Initializing tests...');
+        }
+
+        async function testEnterpriseEngines() {
+            updateProgress(10, 'Testing Enterprise AI Engine...');
+            console.log('🏢 Testing Enterprise Engines...');
+            
+            // Test EnterpriseAIEngine
+            const hasEnterpriseAI = typeof EnterpriseAIEngine !== 'undefined';
+            console.log('EnterpriseAIEngine available:', hasEnterpriseAI);
+            updateTestStatus('enterpriseAI', hasEnterpriseAI);
+            
+            // Test AdvancedReportingEngine
+            const hasReportingEngine = typeof AdvancedReportingEngine !== 'undefined';
+            console.log('AdvancedReportingEngine available:', hasReportingEngine);
+            updateTestStatus('reportingEngine', hasReportingEngine);
+            
+            // Test initialization
+            const hasInitialization = window.enterpriseAI && window.reportingEngine;
+            console.log('Enterprise initialization:', hasInitialization);
+            updateTestStatus('initialization', hasInitialization);
+            
+            await delay(500);
+        }
+
+        async function testReportsSystem() {
+            updateProgress(30, 'Testing Reports System...');
+            
+            // Test Reports View DOM
+            updateTestStatus('reportsView', document.getElementById('reportsView') !== null);
+            
+            // Test Report Generation
+            let reportGenWorking = false;
+            try {
+                if (window.reportingEngine) {
+                    const report = window.reportingEngine.generatePerformanceReport(portfolioData);
+                    reportGenWorking = report && typeof report === 'object';
+                }
+            } catch (e) {
+                reportGenWorking = false;
+            }
+            updateTestStatus('reportGeneration', reportGenWorking);
+            
+            // Test Report Types
+            const reportItems = document.querySelectorAll('.report-item');
+            updateTestStatus('reportTypes', reportItems.length >= 5);
+            
+            // Test Export Formats
+            let exportWorking = false;
+            try {
+                if (window.reportingEngine) {
+                    const htmlExport = window.reportingEngine.exportToHTML({metadata: {reportType: 'test'}});
+                    exportWorking = htmlExport && typeof htmlExport === 'string';
+                }
+            } catch (e) {
+                exportWorking = false;
+            }
+            updateTestStatus('exportFormats', exportWorking);
+            
+            await delay(500);
+        }
+
+        async function testRiskManagement() {
+            updateProgress(50, 'Testing Risk Management...');
+            
+            // Test Risk View DOM
+            updateTestStatus('riskView', document.getElementById('riskView') !== null);
+            
+            // Test Risk Gauge
+            updateTestStatus('riskGauge', document.getElementById('riskGauge') !== null);
+            
+            // Test Stress Testing
+            const scenarios = document.querySelectorAll('.scenario-item');
+            updateTestStatus('stressTesting', scenarios.length >= 3);
+            
+            // Test Risk Metrics
+            let riskMetricsWorking = false;
+            try {
+                if (window.enterpriseAI) {
+                    const riskAnalysis = window.enterpriseAI.performRealTimeRiskAnalysis(portfolioData);
+                    riskMetricsWorking = riskAnalysis && riskAnalysis.metrics;
+                }
+            } catch (e) {
+                riskMetricsWorking = false;
+            }
+            updateTestStatus('riskMetrics', riskMetricsWorking);
+            
+            await delay(500);
+        }
+
+        async function testESGFeatures() {
+            updateProgress(70, 'Testing ESG Features...');
+            
+            // Test ESG View DOM
+            updateTestStatus('esgView', document.getElementById('esgView') !== null);
+            
+            // Test ESG Scoring
+            let esgScoringWorking = false;
+            try {
+                if (window.enterpriseAI) {
+                    const esgMetrics = window.enterpriseAI.analyzeESGMetrics(portfolioData);
+                    esgScoringWorking = esgMetrics && esgMetrics.environmental;
+                }
+            } catch (e) {
+                esgScoringWorking = false;
+            }
+            updateTestStatus('esgScoring', esgScoringWorking);
+            
+            // Test SDG Alignment
+            const sdgItems = document.querySelectorAll('.sdg-item');
+            updateTestStatus('sdgAlignment', sdgItems.length >= 4);
+            
+            // Test Impact Chart
+            updateTestStatus('impactChart', document.getElementById('impactChart') !== null);
+            
+            await delay(500);
+        }
+
+        async function testNavigationSystem() {
+            updateProgress(85, 'Testing Navigation System...');
+            
+            // Test Navigation Buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            updateTestStatus('navButtons', navButtons.length === 8);
+            
+            // Test View Switching
+            const reportsBtn = document.querySelector('[data-view="reports"]');
+            const riskBtn = document.querySelector('[data-view="risk"]');
+            const esgBtn = document.querySelector('[data-view="esg"]');
+            updateTestStatus('viewSwitching', reportsBtn && riskBtn && esgBtn);
+            
+            // Test View Initialization
+            let viewInitWorking = false;
+            try {
+                if (typeof initializeReportsView === 'function' && 
+                    typeof initializeRiskView === 'function' && 
+                    typeof initializeESGView === 'function') {
+                    viewInitWorking = true;
+                }
+            } catch (e) {
+                viewInitWorking = false;
+            }
+            updateTestStatus('viewInit', viewInitWorking);
+            
+            await delay(500);
+        }
+
+        async function testUIExperience() {
+            updateProgress(95, 'Testing UI & Experience...');
+            
+            // Test CSS Loading
+            const computedStyle = getComputedStyle(document.documentElement);
+            const primaryColor = computedStyle.getPropertyValue('--color-primary');
+            updateTestStatus('cssLoading', primaryColor.trim() !== '');
+            
+            // Test Responsive Design
+            const testClasses = ['reports-grid', 'risk-grid', 'esg-grid'];
+            const responsiveWorking = testClasses.some(className => 
+                document.querySelector(`.${className}`) !== null
+            );
+            updateTestStatus('responsive', responsiveWorking);
+            
+            // Test Animations
+            const animationElements = document.querySelectorAll('[style*="transition"], .feature-test');
+            updateTestStatus('animations', animationElements.length > 0);
+            
+            await delay(500);
+        }
+
+        function updateTestStatus(testName, passed) {
+            const testElement = document.querySelector(`[data-test="${testName}"]`);
+            if (testElement) {
+                testElement.className = `feature-test ${passed ? 'passed' : 'failed'}`;
+                const status = testElement.querySelector('.test-status');
+                status.className = `test-status ${passed ? 'passed' : 'failed'}`;
+                status.textContent = passed ? 'PASSED' : 'FAILED';
+            }
+            
+            testResults[testName] = passed;
+            totalTests++;
+        }
+
+        function updateProgress(percentage, message) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = message;
+        }
+
+        function displayFinalResults() {
+            updateProgress(100, 'Test complete!');
+            
+            const passedTests = Object.values(testResults).filter(result => result).length;
+            const totalTestsRun = Object.keys(testResults).length;
+            const successRate = ((passedTests / totalTestsRun) * 100).toFixed(1);
+            
+            document.getElementById('finalResults').style.display = 'block';
+            
+            if (successRate >= 80) {
+                document.getElementById('finalStatus').innerHTML = '🎉 SUCCESS: Phase 3 Enterprise Features Working!';
+                document.getElementById('finalStatus').style.color = '#22c55e';
+            } else if (successRate >= 60) {
+                document.getElementById('finalStatus').innerHTML = '⚠️ PARTIAL: Some Features Need Attention';
+                document.getElementById('finalStatus').style.color = '#f59e0b';
+            } else {
+                document.getElementById('finalStatus').innerHTML = '❌ ISSUES: Multiple Features Need Fixing';
+                document.getElementById('finalStatus').style.color = '#ef4444';
+            }
+            
+            document.getElementById('finalSummary').innerHTML = `
+                <strong>${passedTests}/${totalTestsRun} tests passed (${successRate}% success rate)</strong><br>
+                📊 Reports System: ${getTestStatus('reportsView') && getTestStatus('reportGeneration') ? '✅ Working' : '❌ Issues'}<br>
+                🛡️ Risk Management: ${getTestStatus('riskView') && getTestStatus('riskMetrics') ? '✅ Working' : '❌ Issues'}<br>
+                🌱 ESG Features: ${getTestStatus('esgView') && getTestStatus('esgScoring') ? '✅ Working' : '❌ Issues'}<br>
+                🧭 Navigation: ${getTestStatus('navButtons') && getTestStatus('viewSwitching') ? '✅ Working' : '❌ Issues'}
+            `;
+            
+            console.log('🎯 Phase 3 Testing Complete!');
+            console.log(`Results: ${passedTests}/${totalTestsRun} passed (${successRate}% success rate)`);
+        }
+
+        function getTestStatus(testName) {
+            return testResults[testName] || false;
+        }
+
+        function exportTestResults() {
+            const results = {
+                timestamp: new Date().toISOString(),
+                phase: 'Phase 3 Enterprise Features',
+                testResults: testResults,
+                summary: {
+                    totalTests: Object.keys(testResults).length,
+                    passedTests: Object.values(testResults).filter(result => result).length,
+                    successRate: ((Object.values(testResults).filter(result => result).length / Object.keys(testResults).length) * 100).toFixed(1) + '%'
+                }
+            };
+            
+            const dataStr = JSON.stringify(results, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `portfolio-nexus-phase3-test-results-${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Auto-initialize when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                updateProgress(0, 'Ready to test Phase 3 Enterprise Features');
+                // Auto-run tests after page loads
+                console.log('🚀 Page loaded, starting tests in 2 seconds...');
+                setTimeout(() => {
+                    runPhase3Tests();
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

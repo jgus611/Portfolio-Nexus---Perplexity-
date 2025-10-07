@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - Portfolio Nexus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-result {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        .success { border-left-color: #22c55e; }
+        .error { border-left-color: #ef4444; }
+        .info { border-left-color: #3b82f6; }
+        button {
+            background: #1FB8CD;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #17a2b8;
+        }
+        #console {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Portfolio Nexus - Debug Test</h1>
+    <p>This page will help diagnose why the tests aren't running.</p>
+    
+    <button onclick="runBasicTests()">🧪 Run Basic Tests</button>
+    <button onclick="loadScripts()">📁 Load Scripts</button>
+    <button onclick="testPhase3()">🏢 Test Phase 3</button>
+    <button onclick="clearConsole()">🗑️ Clear</button>
+    
+    <div id="results"></div>
+    <div id="console"></div>
+
+    <!-- Test loading Chart.js first -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        let testResults = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const consoleDiv = document.getElementById('console');
+            consoleDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            
+            console.log(message);
+            
+            // Also add to results
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function clearConsole() {
+            document.getElementById('console').innerHTML = '';
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function runBasicTests() {
+            log('🧪 Starting Basic Tests...', 'info');
+            
+            // Test 1: Chart.js loading
+            if (typeof Chart !== 'undefined') {
+                log('✅ Chart.js loaded successfully', 'success');
+            } else {
+                log('❌ Chart.js failed to load', 'error');
+            }
+            
+            // Test 2: Basic DOM elements
+            const bodyExists = document.body !== null;
+            log(`${bodyExists ? '✅' : '❌'} Document body: ${bodyExists}`, bodyExists ? 'success' : 'error');
+            
+            // Test 3: Browser capabilities
+            const hasLocalStorage = typeof localStorage !== 'undefined';
+            log(`${hasLocalStorage ? '✅' : '❌'} LocalStorage: ${hasLocalStorage}`, hasLocalStorage ? 'success' : 'error');
+            
+            // Test 4: Fetch API
+            const hasFetch = typeof fetch !== 'undefined';
+            log(`${hasFetch ? '✅' : '❌'} Fetch API: ${hasFetch}`, hasFetch ? 'success' : 'error');
+            
+            log('📊 Basic tests completed', 'info');
+        }
+
+        function loadScripts() {
+            log('📁 Testing script loading...', 'info');
+            
+            const scripts = [
+                'ai-chart-enhancer.js',
+                'advanced-ai-engine.js',
+                'enterprise-ai-engine.js',
+                'advanced-reporting-engine.js',
+                'app.js'
+            ];
+            
+            scripts.forEach((scriptName, index) => {
+                setTimeout(() => {
+                    const script = document.createElement('script');
+                    script.src = scriptName;
+                    script.onload = () => {
+                        log(`✅ ${scriptName} loaded successfully`, 'success');
+                        
+                        // Check for specific classes
+                        if (scriptName === 'ai-chart-enhancer.js' && typeof AIChartEnhancer !== 'undefined') {
+                            log(`✅ AIChartEnhancer class available`, 'success');
+                        }
+                        if (scriptName === 'enterprise-ai-engine.js' && typeof EnterpriseAIEngine !== 'undefined') {
+                            log(`✅ EnterpriseAIEngine class available`, 'success');
+                        }
+                        if (scriptName === 'advanced-reporting-engine.js' && typeof AdvancedReportingEngine !== 'undefined') {
+                            log(`✅ AdvancedReportingEngine class available`, 'success');
+                        }
+                    };
+                    script.onerror = () => {
+                        log(`❌ ${scriptName} failed to load`, 'error');
+                    };
+                    document.head.appendChild(script);
+                }, index * 500); // Stagger loading
+            });
+        }
+
+        function testPhase3() {
+            log('🏢 Testing Phase 3 Features...', 'info');
+            
+            // Test if enterprise functions exist
+            const enterpriseTests = [
+                { name: 'EnterpriseAIEngine', test: () => typeof EnterpriseAIEngine !== 'undefined' },
+                { name: 'AdvancedReportingEngine', test: () => typeof AdvancedReportingEngine !== 'undefined' },
+                { name: 'initializeEnterpriseFeatures', test: () => typeof initializeEnterpriseFeatures === 'function' },
+                { name: 'initializeReportsView', test: () => typeof initializeReportsView === 'function' },
+                { name: 'initializeRiskView', test: () => typeof initializeRiskView === 'function' },
+                { name: 'initializeESGView', test: () => typeof initializeESGView === 'function' }
+            ];
+            
+            enterpriseTests.forEach(test => {
+                try {
+                    const result = test.test();
+                    log(`${result ? '✅' : '❌'} ${test.name}: ${result ? 'Available' : 'Not found'}`, result ? 'success' : 'error');
+                } catch (e) {
+                    log(`❌ ${test.name}: Error - ${e.message}`, 'error');
+                }
+            });
+            
+            // Test if we can create instances
+            try {
+                if (typeof EnterpriseAIEngine !== 'undefined') {
+                    const enterpriseAI = new EnterpriseAIEngine();
+                    log(`✅ EnterpriseAIEngine instance created successfully`, 'success');
+                }
+            } catch (e) {
+                log(`❌ EnterpriseAIEngine instantiation failed: ${e.message}`, 'error');
+            }
+            
+            try {
+                if (typeof AdvancedReportingEngine !== 'undefined') {
+                    const reportingEngine = new AdvancedReportingEngine();
+                    log(`✅ AdvancedReportingEngine instance created successfully`, 'success');
+                }
+            } catch (e) {
+                log(`❌ AdvancedReportingEngine instantiation failed: ${e.message}`, 'error');
+            }
+        }
+
+        // Auto-run basic tests when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                log('🚀 Debug Test Page Loaded', 'info');
+                log('Click buttons above to run specific tests', 'info');
+            }, 500);
+        });
+
+        // Capture console errors
+        window.addEventListener('error', function(e) {
+            log(`❌ JavaScript Error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+        });
+    </script>
+</body>
+</html>

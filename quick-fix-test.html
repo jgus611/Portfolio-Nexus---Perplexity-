@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Fix Test - Portfolio Nexus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-result {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        .success { border-left-color: #22c55e; background: #f0fdf4; }
+        .error { border-left-color: #ef4444; background: #fef2f2; }
+        .warning { border-left-color: #f59e0b; background: #fffbeb; }
+        .console {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        button {
+            background: #1FB8CD;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #17a2b8; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Portfolio Nexus - Quick Fix Test</h1>
+    <p>Testing the recent fixes to script loading and enterprise initialization.</p>
+    
+    <button onclick="runQuickTest()">🧪 Run Quick Test</button>
+    <button onclick="testScriptLoading()">📁 Test Script Loading</button>
+    <button onclick="manualInitEnterprise()">🏢 Manual Init Enterprise</button>
+    <button onclick="clearResults()">🗑️ Clear</button>
+    
+    <div id="results"></div>
+    <div class="console" id="console">
+        > Quick Fix Test Ready
+        > Click "Run Quick Test" to begin
+    </div>
+
+    <!-- Load scripts with new deferred loading -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="ai-chart-enhancer.js" defer></script>
+    <script src="advanced-ai-engine.js" defer></script>
+    <script src="enterprise-ai-engine.js" defer></script>
+    <script src="advanced-reporting-engine.js" defer></script>
+    <script src="app.js" defer></script>
+
+    <script>
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const console = document.getElementById('console');
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            console.innerHTML += `\n[${timestamp}] ${prefix} ${message}`;
+            console.scrollTop = console.scrollHeight;
+            
+            // Also add to results
+            const results = document.getElementById('results');
+            const result = document.createElement('div');
+            result.className = `test-result ${type}`;
+            result.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            results.appendChild(result);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('console').innerHTML = '> Console cleared';
+        }
+
+        async function runQuickTest() {
+            log('🚀 Starting Quick Fix Test...', 'info');
+            clearResults();
+            
+            // Wait for scripts to load
+            await delay(2000);
+            
+            // Test 1: Chart.js
+            const chartjsLoaded = typeof Chart !== 'undefined';
+            log(`Chart.js: ${chartjsLoaded ? 'LOADED' : 'MISSING'}`, chartjsLoaded ? 'success' : 'error');
+            
+            // Test 2: Enterprise classes
+            const enterpriseClassExists = typeof EnterpriseAIEngine !== 'undefined';
+            log(`EnterpriseAIEngine class: ${enterpriseClassExists ? 'FOUND' : 'MISSING'}`, enterpriseClassExists ? 'success' : 'error');
+            
+            const reportingClassExists = typeof AdvancedReportingEngine !== 'undefined';
+            log(`AdvancedReportingEngine class: ${reportingClassExists ? 'FOUND' : 'MISSING'}`, reportingClassExists ? 'success' : 'error');
+            
+            // Test 3: Portfolio data
+            const portfolioDataExists = typeof portfolioData !== 'undefined';
+            log(`Portfolio data: ${portfolioDataExists ? 'AVAILABLE' : 'MISSING'}`, portfolioDataExists ? 'success' : 'error');
+            
+            // Test 4: Enterprise instances
+            let enterpriseInstanceExists = window.enterpriseAI instanceof EnterpriseAIEngine;
+            let reportingInstanceExists = window.reportingEngine instanceof AdvancedReportingEngine;
+            
+            // If instances don't exist, try to create them
+            if (!enterpriseInstanceExists || !reportingInstanceExists) {
+                log('🔄 Attempting manual enterprise initialization...', 'info');
+                if (typeof window.initializeEnterpriseFeatures === 'function') {
+                    const initResult = window.initializeEnterpriseFeatures();
+                    log(`Manual initialization result: ${initResult}`, initResult ? 'success' : 'error');
+                    
+                    // Re-check after manual initialization
+                    await delay(500);
+                    enterpriseInstanceExists = window.enterpriseAI instanceof EnterpriseAIEngine;
+                    reportingInstanceExists = window.reportingEngine instanceof AdvancedReportingEngine;
+                } else if (typeof initializeEnterpriseFeatures === 'function') {
+                    initializeEnterpriseFeatures();
+                    await delay(500);
+                    enterpriseInstanceExists = window.enterpriseAI instanceof EnterpriseAIEngine;
+                    reportingInstanceExists = window.reportingEngine instanceof AdvancedReportingEngine;
+                }
+            }
+            
+            log(`Enterprise AI instance: ${enterpriseInstanceExists ? 'CREATED' : 'NOT CREATED'}`, enterpriseInstanceExists ? 'success' : 'warning');
+            log(`Reporting engine instance: ${reportingInstanceExists ? 'CREATED' : 'NOT CREATED'}`, reportingInstanceExists ? 'success' : 'warning');
+            
+            // Test 5: Functions
+            const initFunctionExists = typeof initializeEnterpriseFeatures === 'function';
+            log(`initializeEnterpriseFeatures: ${initFunctionExists ? 'AVAILABLE' : 'MISSING'}`, initFunctionExists ? 'success' : 'error');
+            
+            // Summary
+            const totalTests = 6;
+            const passedTests = [chartjsLoaded, enterpriseClassExists, reportingClassExists, portfolioDataExists, enterpriseInstanceExists, reportingInstanceExists].filter(Boolean).length;
+            const successRate = ((passedTests / totalTests) * 100).toFixed(1);
+            
+            log(`=== SUMMARY ===`, 'info');
+            log(`Tests Passed: ${passedTests}/${totalTests} (${successRate}%)`, passedTests === totalTests ? 'success' : 'warning');
+            
+            if (passedTests === totalTests) {
+                log('🎉 All critical components are working!', 'success');
+            } else {
+                log('⚠️ Some components need attention. Check the main app.', 'warning');
+            }
+        }
+
+        async function testScriptLoading() {
+            log('📁 Testing Script Loading Order...', 'info');
+            clearResults();
+            
+            const loadTimes = [];
+            
+            // Monitor script loading
+            const scripts = document.querySelectorAll('script[src]');
+            scripts.forEach(script => {
+                log(`Script found: ${script.src.split('/').pop()}`, 'info');
+            });
+            
+            // Test loading sequence
+            await delay(1000);
+            log('After 1 second:', 'info');
+            log(`- Chart available: ${typeof Chart !== 'undefined'}`, 'info');
+            
+            await delay(1000);
+            log('After 2 seconds:', 'info');
+            log(`- EnterpriseAIEngine: ${typeof EnterpriseAIEngine !== 'undefined'}`, 'info');
+            log(`- AdvancedReportingEngine: ${typeof AdvancedReportingEngine !== 'undefined'}`, 'info');
+            
+            await delay(1000);
+            log('After 3 seconds:', 'info');
+            log(`- Portfolio data: ${typeof portfolioData !== 'undefined'}`, 'info');
+            log(`- Enterprise instances: ${!!window.enterpriseAI}`, 'info');
+            
+            log('Script loading test complete', 'success');
+        }
+
+        async function manualInitEnterprise() {
+            log('🏢 Manual Enterprise Initialization...', 'info');
+            clearResults();
+            
+            // Check if classes are available first
+            const enterpriseAvailable = typeof EnterpriseAIEngine !== 'undefined';
+            const reportingAvailable = typeof AdvancedReportingEngine !== 'undefined';
+            
+            log(`EnterpriseAIEngine class: ${enterpriseAvailable ? 'AVAILABLE' : 'MISSING'}`, enterpriseAvailable ? 'success' : 'error');
+            log(`AdvancedReportingEngine class: ${reportingAvailable ? 'AVAILABLE' : 'MISSING'}`, reportingAvailable ? 'success' : 'error');
+            
+            if (enterpriseAvailable && reportingAvailable) {
+                try {
+                    // Try multiple initialization methods
+                    if (typeof window.initializeEnterpriseFeatures === 'function') {
+                        log('Using window.initializeEnterpriseFeatures...', 'info');
+                        const result = window.initializeEnterpriseFeatures();
+                        log(`Initialization result: ${result}`, result ? 'success' : 'error');
+                    } else if (typeof initializeEnterpriseFeatures === 'function') {
+                        log('Using direct initializeEnterpriseFeatures...', 'info');
+                        initializeEnterpriseFeatures();
+                    } else {
+                        log('Creating instances manually...', 'info');
+                        window.enterpriseAI = new EnterpriseAIEngine();
+                        window.reportingEngine = new AdvancedReportingEngine();
+                        log('Manual instance creation completed', 'success');
+                    }
+                    
+                    await delay(500);
+                    
+                    // Check results
+                    const enterpriseCreated = window.enterpriseAI instanceof EnterpriseAIEngine;
+                    const reportingCreated = window.reportingEngine instanceof AdvancedReportingEngine;
+                    
+                    log(`Enterprise AI instance: ${enterpriseCreated ? 'SUCCESS' : 'FAILED'}`, enterpriseCreated ? 'success' : 'error');
+                    log(`Reporting engine instance: ${reportingCreated ? 'SUCCESS' : 'FAILED'}`, reportingCreated ? 'success' : 'error');
+                    
+                    if (enterpriseCreated && reportingCreated) {
+                        log('🎉 Manual initialization successful!', 'success');
+                    } else {
+                        log('❌ Manual initialization partially failed', 'warning');
+                    }
+                    
+                } catch (e) {
+                    log(`❌ Manual initialization error: ${e.message}`, 'error');
+                }
+            } else {
+                log('❌ Cannot initialize - classes not available', 'error');
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Auto-run test after page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                log('🔧 Quick Fix Test Page Ready', 'info');
+                log('Recent fixes applied:', 'info');
+                log('- Added defer attributes to script tags', 'info');
+                log('- Added delay to enterprise initialization', 'info');
+                log('- Improved error handling and logging', 'info');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

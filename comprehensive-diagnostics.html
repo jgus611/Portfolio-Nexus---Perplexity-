@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Nexus - Comprehensive Diagnostics</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .diagnostic-header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #e2e8f0;
+        }
+        .test-item.pass { border-left-color: #10b981; background: #f0fdf4; }
+        .test-item.fail { border-left-color: #ef4444; background: #fef2f2; }
+        .test-item.warn { border-left-color: #f59e0b; background: #fffbeb; }
+        .status {
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .status.pass { background: #10b981; color: white; }
+        .status.fail { background: #ef4444; color: white; }
+        .status.warn { background: #f59e0b; color: white; }
+        .console-output {
+            background: #1a1a1a;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-secondary { background: #6b7280; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-header">
+        <h1>🔍 Portfolio Nexus - Comprehensive Diagnostics</h1>
+        <p>Deep dive analysis to identify what's working and what needs attention</p>
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="runFullDiagnostics()">🧪 Run Full Diagnostics</button>
+            <button class="btn btn-secondary" onclick="testMainApp()">🚀 Test Main App</button>
+            <button class="btn btn-secondary" onclick="clearOutput()">🗑️ Clear</button>
+        </div>
+    </div>
+
+    <div class="test-grid">
+        <!-- Core Scripts Test -->
+        <div class="test-section">
+            <h3>📦 Core Scripts Loading</h3>
+            <div id="coreScripts">
+                <div class="test-item" data-test="chartjs">
+                    <span>Chart.js Library</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="appjs">
+                    <span>app.js Main Script</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="aienhancer">
+                    <span>ai-chart-enhancer.js</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="advancedai">
+                    <span>advanced-ai-engine.js</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="enterpriseai">
+                    <span>enterprise-ai-engine.js</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="reporting">
+                    <span>advanced-reporting-engine.js</span>
+                    <span class="status">PENDING</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOM Elements Test -->
+        <div class="test-section">
+            <h3>🏗️ DOM Structure</h3>
+            <div id="domTests">
+                <div class="test-item" data-test="loginform">
+                    <span>Login Form</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="dashboard">
+                    <span>Dashboard View</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="reportsview">
+                    <span>Reports View</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="riskview">
+                    <span>Risk View</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="esgview">
+                    <span>ESG View</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="navigation">
+                    <span>Navigation Buttons</span>
+                    <span class="status">PENDING</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enterprise Features Test -->
+        <div class="test-section">
+            <h3>🏢 Enterprise Features</h3>
+            <div id="enterpriseTests">
+                <div class="test-item" data-test="enterpriseclass">
+                    <span>EnterpriseAIEngine Class</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="reportingclass">
+                    <span>AdvancedReportingEngine Class</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="enterpriseinstance">
+                    <span>Enterprise AI Instance</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="reportinginstance">
+                    <span>Reporting Engine Instance</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="enterpriseinit">
+                    <span>Enterprise Initialization</span>
+                    <span class="status">PENDING</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Functionality Test -->
+        <div class="test-section">
+            <h3>⚙️ Core Functionality</h3>
+            <div id="functionalityTests">
+                <div class="test-item" data-test="reportgeneration">
+                    <span>Report Generation</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="riskanalysis">
+                    <span>Risk Analysis</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="esgscoring">
+                    <span>ESG Scoring</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="viewswitching">
+                    <span>View Switching</span>
+                    <span class="status">PENDING</span>
+                </div>
+                <div class="test-item" data-test="chartsrendering">
+                    <span>Charts Rendering</span>
+                    <span class="status">PENDING</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="console-output" id="consoleOutput">
+        > Portfolio Nexus Diagnostics Ready
+        > Click "Run Full Diagnostics" to begin comprehensive testing
+    </div>
+
+    <!-- Load Scripts for Testing -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let diagnosticResults = {};
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const output = document.getElementById('consoleOutput');
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warn' ? '⚠️' : 'ℹ️';
+            output.innerHTML += `\n[${timestamp}] ${prefix} ${message}`;
+            output.scrollTop = output.scrollHeight;
+            console.log(`${prefix} ${message}`);
+        }
+
+        function clearOutput() {
+            document.getElementById('consoleOutput').innerHTML = '> Console cleared';
+            // Reset all tests
+            const allTests = document.querySelectorAll('.test-item');
+            allTests.forEach(test => {
+                test.className = 'test-item';
+                test.querySelector('.status').textContent = 'PENDING';
+                test.querySelector('.status').className = 'status';
+            });
+            diagnosticResults = {};
+        }
+
+        function updateTestStatus(testId, passed, message = '') {
+            const testElement = document.querySelector(`[data-test="${testId}"]`);
+            if (testElement) {
+                testElement.className = `test-item ${passed ? 'pass' : 'fail'}`;
+                const statusElement = testElement.querySelector('.status');
+                statusElement.textContent = passed ? 'PASS' : 'FAIL';
+                statusElement.className = `status ${passed ? 'pass' : 'fail'}`;
+            }
+            diagnosticResults[testId] = { passed, message };
+            log(`${testId}: ${passed ? 'PASS' : 'FAIL'}${message ? ' - ' + message : ''}`, passed ? 'success' : 'error');
+        }
+
+        async function runFullDiagnostics() {
+            log('🚀 Starting Full Diagnostics Suite...', 'info');
+            clearOutput();
+            
+            await testCoreScripts();
+            await testDOMStructure();
+            await testEnterpriseFeatures();
+            await testCoreFunctionality();
+            
+            generateSummaryReport();
+        }
+
+        async function testCoreScripts() {
+            log('📦 Testing Core Scripts...', 'info');
+            
+            // Test Chart.js
+            updateTestStatus('chartjs', typeof Chart !== 'undefined', 'Chart.js library');
+            
+            // Load and test other scripts
+            const scripts = [
+                { id: 'appjs', src: 'app.js', check: () => typeof portfolioData !== 'undefined' },
+                { id: 'aienhancer', src: 'ai-chart-enhancer.js', check: () => typeof AIChartEnhancer !== 'undefined' },
+                { id: 'advancedai', src: 'advanced-ai-engine.js', check: () => typeof AdvancedAIEngine !== 'undefined' },
+                { id: 'enterpriseai', src: 'enterprise-ai-engine.js', check: () => typeof EnterpriseAIEngine !== 'undefined' },
+                { id: 'reporting', src: 'advanced-reporting-engine.js', check: () => typeof AdvancedReportingEngine !== 'undefined' }
+            ];
+
+            for (const script of scripts) {
+                await loadScript(script.src, script.id, script.check);
+                await delay(300);
+            }
+        }
+
+        function loadScript(src, testId, checkFunction) {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => {
+                    setTimeout(() => {
+                        try {
+                            const result = checkFunction();
+                            updateTestStatus(testId, result, `${src} loaded and verified`);
+                        } catch (e) {
+                            updateTestStatus(testId, false, `Error checking ${src}: ${e.message}`);
+                        }
+                        resolve();
+                    }, 100);
+                };
+                script.onerror = () => {
+                    updateTestStatus(testId, false, `Failed to load ${src}`);
+                    resolve();
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        async function testDOMStructure() {
+            log('🏗️ Testing DOM Structure...', 'info');
+            
+            // Wait a bit for potential dynamic DOM creation
+            await delay(1000);
+            
+            const domTests = [
+                { id: 'loginform', selector: '#loginForm', name: 'Login Form' },
+                { id: 'dashboard', selector: '#dashboardView', name: 'Dashboard View' },
+                { id: 'reportsview', selector: '#reportsView', name: 'Reports View' },
+                { id: 'riskview', selector: '#riskView', name: 'Risk View' },
+                { id: 'esgview', selector: '#esgView', name: 'ESG View' },
+                { id: 'navigation', selector: '.nav-btn', name: 'Navigation Buttons' }
+            ];
+
+            domTests.forEach(test => {
+                const elements = document.querySelectorAll(test.selector);
+                const exists = elements.length > 0;
+                updateTestStatus(test.id, exists, exists ? `Found ${elements.length} element(s)` : `Element not found: ${test.selector}`);
+            });
+        }
+
+        async function testEnterpriseFeatures() {
+            log('🏢 Testing Enterprise Features...', 'info');
+            
+            // Test class availability
+            updateTestStatus('enterpriseclass', typeof EnterpriseAIEngine !== 'undefined', 'EnterpriseAIEngine class');
+            updateTestStatus('reportingclass', typeof AdvancedReportingEngine !== 'undefined', 'AdvancedReportingEngine class');
+            
+            // Test instances
+            updateTestStatus('enterpriseinstance', window.enterpriseAI instanceof EnterpriseAIEngine, 'Enterprise AI instance');
+            updateTestStatus('reportinginstance', window.reportingEngine instanceof AdvancedReportingEngine, 'Reporting engine instance');
+            
+            // Test initialization function
+            updateTestStatus('enterpriseinit', typeof initializeEnterpriseFeatures === 'function', 'Enterprise initialization function');
+            
+            // Try to initialize if not already done
+            if (typeof initializeEnterpriseFeatures === 'function' && !window.enterpriseAI) {
+                try {
+                    initializeEnterpriseFeatures();
+                    log('🔄 Attempted enterprise features initialization', 'info');
+                    await delay(500);
+                    updateTestStatus('enterpriseinstance', window.enterpriseAI instanceof EnterpriseAIEngine, 'Enterprise AI instance after init');
+                    updateTestStatus('reportinginstance', window.reportingEngine instanceof AdvancedReportingEngine, 'Reporting engine instance after init');
+                } catch (e) {
+                    log(`❌ Enterprise initialization failed: ${e.message}`, 'error');
+                }
+            }
+        }
+
+        async function testCoreFunctionality() {
+            log('⚙️ Testing Core Functionality...', 'info');
+            
+            // Test report generation
+            let reportGenerationWorks = false;
+            try {
+                if (window.reportingEngine && typeof portfolioData !== 'undefined') {
+                    const report = window.reportingEngine.generatePerformanceReport(portfolioData);
+                    reportGenerationWorks = report && typeof report === 'object';
+                }
+            } catch (e) {
+                log(`Report generation error: ${e.message}`, 'error');
+            }
+            updateTestStatus('reportgeneration', reportGenerationWorks, 'Performance report generation');
+
+            // Test risk analysis
+            let riskAnalysisWorks = false;
+            try {
+                if (window.enterpriseAI && typeof portfolioData !== 'undefined') {
+                    const riskAnalysis = window.enterpriseAI.performRealTimeRiskAnalysis(portfolioData);
+                    riskAnalysisWorks = riskAnalysis && riskAnalysis.metrics;
+                }
+            } catch (e) {
+                log(`Risk analysis error: ${e.message}`, 'error');
+            }
+            updateTestStatus('riskanalysis', riskAnalysisWorks, 'Real-time risk analysis');
+
+            // Test ESG scoring
+            let esgScoringWorks = false;
+            try {
+                if (window.enterpriseAI && typeof portfolioData !== 'undefined') {
+                    const esgMetrics = window.enterpriseAI.analyzeESGMetrics(portfolioData);
+                    esgScoringWorks = esgMetrics && esgMetrics.environmental;
+                }
+            } catch (e) {
+                log(`ESG scoring error: ${e.message}`, 'error');
+            }
+            updateTestStatus('esgscoring', esgScoringWorks, 'ESG metrics analysis');
+
+            // Test view switching
+            const navButtons = document.querySelectorAll('.nav-btn[data-view]');
+            updateTestStatus('viewswitching', navButtons.length >= 6, `Found ${navButtons.length} navigation buttons`);
+
+            // Test charts rendering
+            const chartCanvases = document.querySelectorAll('canvas');
+            updateTestStatus('chartsrendering', chartCanvases.length > 0, `Found ${chartCanvases.length} chart canvas elements`);
+        }
+
+        async function testMainApp() {
+            log('🚀 Testing Main App Integration...', 'info');
+            
+            // Try to simulate login
+            const loginBtn = document.querySelector('#loginBtn');
+            if (loginBtn) {
+                log('Found login button, attempting to simulate login...', 'info');
+                loginBtn.click();
+                await delay(1000);
+                
+                const dashboardVisible = document.querySelector('#dashboardView:not([style*="display: none"])');
+                log(`Dashboard visibility after login: ${dashboardVisible ? 'Visible' : 'Hidden'}`, dashboardVisible ? 'success' : 'warn');
+            } else {
+                log('Login button not found in main app', 'warn');
+            }
+            
+            // Test navigation
+            const navButtons = document.querySelectorAll('.nav-btn[data-view]');
+            log(`Navigation test: Found ${navButtons.length} navigation buttons`, navButtons.length > 0 ? 'success' : 'error');
+            
+            if (navButtons.length > 0) {
+                // Test clicking Reports view
+                const reportsBtn = document.querySelector('.nav-btn[data-view="reports"]');
+                if (reportsBtn) {
+                    reportsBtn.click();
+                    await delay(500);
+                    const reportsVisible = document.querySelector('#reportsView:not([style*="display: none"])');
+                    log(`Reports view navigation: ${reportsVisible ? 'Success' : 'Failed'}`, reportsVisible ? 'success' : 'error');
+                }
+            }
+        }
+
+        function generateSummaryReport() {
+            log('📊 Generating Summary Report...', 'info');
+            
+            const totalTests = Object.keys(diagnosticResults).length;
+            const passedTests = Object.values(diagnosticResults).filter(r => r.passed).length;
+            const failedTests = totalTests - passedTests;
+            const successRate = ((passedTests / totalTests) * 100).toFixed(1);
+            
+            log('='.repeat(50), 'info');
+            log(`DIAGNOSTIC SUMMARY REPORT`, 'info');
+            log('='.repeat(50), 'info');
+            log(`Total Tests: ${totalTests}`, 'info');
+            log(`Passed: ${passedTests}`, 'success');
+            log(`Failed: ${failedTests}`, failedTests > 0 ? 'error' : 'info');
+            log(`Success Rate: ${successRate}%`, 'info');
+            log('='.repeat(50), 'info');
+            
+            if (failedTests > 0) {
+                log('FAILED TESTS:', 'error');
+                Object.entries(diagnosticResults).forEach(([testId, result]) => {
+                    if (!result.passed) {
+                        log(`❌ ${testId}: ${result.message || 'No details'}`, 'error');
+                    }
+                });
+                log('='.repeat(50), 'info');
+            }
+            
+            // Recommendations
+            log('RECOMMENDATIONS:', 'info');
+            if (failedTests === 0) {
+                log('🎉 All tests passed! Portfolio Nexus is working correctly.', 'success');
+            } else if (successRate >= 70) {
+                log('⚠️ Most features are working. Check failed tests above.', 'warn');
+            } else {
+                log('❌ Multiple issues detected. Review script loading and DOM structure.', 'error');
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            log(`JavaScript Error: ${e.message} in ${e.filename}:${e.lineno}`, 'error');
+        });
+
+        // Ready state
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🔍 Comprehensive Diagnostics Ready', 'info');
+        });
+    </script>
+</body>
+</html>

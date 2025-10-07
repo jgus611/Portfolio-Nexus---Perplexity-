@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Nexus - AI-Powered Portfolio Management</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Load Chart.js first -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="ai-chart-enhancer.js"></script>
-    <script src="advanced-ai-engine.js"></script>
+    
+    <!-- Load AI engines in order -->
+    <script src="ai-chart-enhancer.js" defer></script>
+    <script src="advanced-ai-engine.js" defer></script>
+    <script src="enterprise-ai-engine.js" defer></script>
+    <script src="advanced-reporting-engine.js" defer></script>
 </head>
 <body>
     <!-- Login Page -->
@@ -47,6 +52,9 @@
                     <button class="nav-btn" data-view="portfolio">Portfolio</button>
                     <button class="nav-btn" data-view="rebalancing">Rebalancing</button>
                     <button class="nav-btn" data-view="analytics">Analytics</button>
+                    <button class="nav-btn" data-view="reports">Reports</button>
+                    <button class="nav-btn" data-view="risk">Risk</button>
+                    <button class="nav-btn" data-view="esg">ESG</button>
                     <button class="nav-btn" data-view="settings">Settings</button>
                 </nav>
                 <div class="header-actions">
@@ -387,6 +395,388 @@
                 </div>
             </div>
 
+            <!-- Reports View -->
+            <div id="reportsView" class="view">
+                <div class="reports-header">
+                    <h2>Portfolio Reports</h2>
+                    <div class="report-actions">
+                        <button class="btn btn--secondary" id="generateReport">Generate Report</button>
+                        <button class="btn btn--primary" id="scheduleReports">Schedule Reports</button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <!-- Report Types -->
+                    <div class="report-types">
+                        <h3>Available Reports</h3>
+                        <div class="report-list">
+                            <div class="report-item" data-report="performance">
+                                <div class="report-icon">📈</div>
+                                <div class="report-info">
+                                    <div class="report-title">Performance Report</div>
+                                    <div class="report-description">Comprehensive portfolio performance analysis</div>
+                                </div>
+                                <button class="btn btn--small btn--outline">Generate</button>
+                            </div>
+                            <div class="report-item" data-report="risk">
+                                <div class="report-icon">🛡️</div>
+                                <div class="report-info">
+                                    <div class="report-title">Risk Assessment</div>
+                                    <div class="report-description">Detailed risk analysis and recommendations</div>
+                                </div>
+                                <button class="btn btn--small btn--outline">Generate</button>
+                            </div>
+                            <div class="report-item" data-report="esg">
+                                <div class="report-icon">🌱</div>
+                                <div class="report-info">
+                                    <div class="report-title">ESG Impact Report</div>
+                                    <div class="report-description">Sustainability and impact metrics</div>
+                                </div>
+                                <button class="btn btn--small btn--outline">Generate</button>
+                            </div>
+                            <div class="report-item" data-report="tax">
+                                <div class="report-icon">💰</div>
+                                <div class="report-info">
+                                    <div class="report-title">Tax Optimization</div>
+                                    <div class="report-description">Tax efficiency analysis and strategies</div>
+                                </div>
+                                <button class="btn btn--small btn--outline">Generate</button>
+                            </div>
+                            <div class="report-item" data-report="compliance">
+                                <div class="report-icon">📋</div>
+                                <div class="report-info">
+                                    <div class="report-title">Compliance Report</div>
+                                    <div class="report-description">Regulatory compliance overview</div>
+                                </div>
+                                <button class="btn btn--small btn--outline">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reports -->
+                    <div class="recent-reports">
+                        <h3>Recent Reports</h3>
+                        <div class="report-history">
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <div class="history-title">Monthly Performance Report</div>
+                                    <div class="history-date">September 2024</div>
+                                </div>
+                                <div class="history-actions">
+                                    <button class="btn btn--small btn--ghost">View</button>
+                                    <button class="btn btn--small btn--ghost">Download</button>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <div class="history-title">Quarterly Risk Assessment</div>
+                                    <div class="history-date">Q3 2024</div>
+                                </div>
+                                <div class="history-actions">
+                                    <button class="btn btn--small btn--ghost">View</button>
+                                    <button class="btn btn--small btn--ghost">Download</button>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <div class="history-title">ESG Impact Report</div>
+                                    <div class="history-date">August 2024</div>
+                                </div>
+                                <div class="history-actions">
+                                    <button class="btn btn--small btn--ghost">View</button>
+                                    <button class="btn btn--small btn--ghost">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Preview -->
+                <div id="reportPreview" class="report-preview hidden">
+                    <div class="preview-header">
+                        <h3>Report Preview</h3>
+                        <button class="btn btn--ghost" id="closePreview">×</button>
+                    </div>
+                    <div id="reportContent" class="report-content">
+                        <!-- Dynamic report content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Management View -->
+            <div id="riskView" class="view">
+                <div class="risk-header">
+                    <h2>Risk Management</h2>
+                    <div class="risk-summary">
+                        <div class="risk-gauge">
+                            <div class="gauge-container">
+                                <canvas id="riskGauge" width="200" height="200"></canvas>
+                                <div class="gauge-label">Risk Score: 6.2/10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="risk-grid">
+                    <!-- Risk Metrics -->
+                    <div class="risk-metrics">
+                        <h3>Risk Metrics</h3>
+                        <div class="metric-cards">
+                            <div class="risk-card">
+                                <div class="risk-card-header">
+                                    <span class="risk-icon">📊</span>
+                                    <span class="risk-title">Value at Risk (95%)</span>
+                                </div>
+                                <div class="risk-value">-$265</div>
+                                <div class="risk-period">Daily</div>
+                            </div>
+                            <div class="risk-card">
+                                <div class="risk-card-header">
+                                    <span class="risk-icon">📉</span>
+                                    <span class="risk-title">Maximum Drawdown</span>
+                                </div>
+                                <div class="risk-value">-3.2%</div>
+                                <div class="risk-period">Current</div>
+                            </div>
+                            <div class="risk-card">
+                                <div class="risk-card-header">
+                                    <span class="risk-icon">⚡</span>
+                                    <span class="risk-title">Portfolio Beta</span>
+                                </div>
+                                <div class="risk-value">0.94</div>
+                                <div class="risk-period">vs S&P 500</div>
+                            </div>
+                            <div class="risk-card">
+                                <div class="risk-card-header">
+                                    <span class="risk-icon">📈</span>
+                                    <span class="risk-title">Sharpe Ratio</span>
+                                </div>
+                                <div class="risk-value">1.42</div>
+                                <div class="risk-period">Risk-Adjusted</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concentration Risk -->
+                    <div class="concentration-risk">
+                        <h3>Concentration Analysis</h3>
+                        <div class="concentration-chart">
+                            <canvas id="concentrationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Scenario Analysis -->
+                    <div class="scenario-analysis">
+                        <h3>Stress Testing</h3>
+                        <div class="scenario-list">
+                            <div class="scenario-item">
+                                <div class="scenario-name">Market Crash (-20%)</div>
+                                <div class="scenario-impact negative">-18.4%</div>
+                                <div class="scenario-recovery">14 months recovery</div>
+                            </div>
+                            <div class="scenario-item">
+                                <div class="scenario-name">Interest Rate Rise (+200bp)</div>
+                                <div class="scenario-impact negative">-7.2%</div>
+                                <div class="scenario-recovery">8 months recovery</div>
+                            </div>
+                            <div class="scenario-item">
+                                <div class="scenario-name">Inflation Spike (+300bp)</div>
+                                <div class="scenario-impact negative">-5.8%</div>
+                                <div class="scenario-recovery">6 months recovery</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Risk Recommendations -->
+                    <div class="risk-recommendations">
+                        <h3>Risk Recommendations</h3>
+                        <div class="recommendation-list">
+                            <div class="recommendation-item high">
+                                <div class="rec-priority">HIGH</div>
+                                <div class="rec-content">
+                                    <div class="rec-title">Reduce Technology Concentration</div>
+                                    <div class="rec-description">Technology sector allocation at 22.1% exceeds target of 18%</div>
+                                    <div class="rec-action">Consider reducing by $567</div>
+                                </div>
+                            </div>
+                            <div class="recommendation-item medium">
+                                <div class="rec-priority">MEDIUM</div>
+                                <div class="rec-content">
+                                    <div class="rec-title">Add Currency Hedging</div>
+                                    <div class="rec-description">EUR exposure at 12.4% without hedging</div>
+                                    <div class="rec-action">Consider 50% currency hedge</div>
+                                </div>
+                            </div>
+                            <div class="recommendation-item low">
+                                <div class="rec-priority">LOW</div>
+                                <div class="rec-content">
+                                    <div class="rec-title">Monitor Small-Cap Liquidity</div>
+                                    <div class="rec-description">2.7% in low-liquidity positions</div>
+                                    <div class="rec-action">Monitor during market stress</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESG View -->
+            <div id="esgView" class="view">
+                <div class="esg-header">
+                    <h2>ESG & Sustainable Investing</h2>
+                    <div class="esg-score-display">
+                        <div class="esg-score">3.9</div>
+                        <div class="esg-grade">B+</div>
+                        <div class="esg-percentile">78th percentile</div>
+                    </div>
+                </div>
+
+                <div class="esg-grid">
+                    <!-- ESG Breakdown -->
+                    <div class="esg-breakdown">
+                        <h3>ESG Score Breakdown</h3>
+                        <div class="esg-components">
+                            <div class="esg-component">
+                                <div class="component-header">
+                                    <span class="component-icon">🌍</span>
+                                    <span class="component-name">Environmental</span>
+                                    <span class="component-score">3.8</span>
+                                </div>
+                                <div class="component-bar">
+                                    <div class="bar-fill" style="width: 76%"></div>
+                                </div>
+                            </div>
+                            <div class="esg-component">
+                                <div class="component-header">
+                                    <span class="component-icon">👥</span>
+                                    <span class="component-name">Social</span>
+                                    <span class="component-score">4.1</span>
+                                </div>
+                                <div class="component-bar">
+                                    <div class="bar-fill" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="esg-component">
+                                <div class="component-header">
+                                    <span class="component-icon">🏛️</span>
+                                    <span class="component-name">Governance</span>
+                                    <span class="component-score">3.9</span>
+                                </div>
+                                <div class="component-bar">
+                                    <div class="bar-fill" style="width: 78%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environmental Metrics -->
+                    <div class="environmental-metrics">
+                        <h3>Environmental Impact</h3>
+                        <div class="metric-grid">
+                            <div class="env-metric">
+                                <div class="metric-icon">🏭</div>
+                                <div class="metric-value">142.5</div>
+                                <div class="metric-label">Carbon Intensity<br>(tCO2e/$M)</div>
+                            </div>
+                            <div class="env-metric">
+                                <div class="metric-icon">⚡</div>
+                                <div class="metric-value">18.4%</div>
+                                <div class="metric-label">Renewable<br>Energy</div>
+                            </div>
+                            <div class="env-metric">
+                                <div class="metric-icon">💧</div>
+                                <div class="metric-value">3.2</div>
+                                <div class="metric-label">Water<br>Management</div>
+                            </div>
+                            <div class="env-metric">
+                                <div class="metric-icon">♻️</div>
+                                <div class="metric-value">4.1</div>
+                                <div class="metric-label">Waste<br>Reduction</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SDG Alignment -->
+                    <div class="sdg-alignment">
+                        <h3>UN SDG Alignment</h3>
+                        <div class="sdg-list">
+                            <div class="sdg-item">
+                                <div class="sdg-icon">🔋</div>
+                                <div class="sdg-info">
+                                    <div class="sdg-name">Clean Energy</div>
+                                    <div class="sdg-allocation">18.4%</div>
+                                </div>
+                            </div>
+                            <div class="sdg-item">
+                                <div class="sdg-icon">💼</div>
+                                <div class="sdg-info">
+                                    <div class="sdg-name">Decent Work</div>
+                                    <div class="sdg-allocation">23.1%</div>
+                                </div>
+                            </div>
+                            <div class="sdg-item">
+                                <div class="sdg-icon">🔬</div>
+                                <div class="sdg-info">
+                                    <div class="sdg-name">Innovation</div>
+                                    <div class="sdg-allocation">31.2%</div>
+                                </div>
+                            </div>
+                            <div class="sdg-item">
+                                <div class="sdg-icon">🌍</div>
+                                <div class="sdg-info">
+                                    <div class="sdg-name">Climate Action</div>
+                                    <div class="sdg-allocation">15.8%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impact Measurement -->
+                    <div class="impact-measurement">
+                        <h3>Impact Measurement</h3>
+                        <div class="impact-chart">
+                            <canvas id="impactChart"></canvas>
+                        </div>
+                        <div class="impact-stats">
+                            <div class="impact-stat">
+                                <div class="stat-value">67.2%</div>
+                                <div class="stat-label">Positive Impact</div>
+                            </div>
+                            <div class="impact-stat">
+                                <div class="stat-value">8.3%</div>
+                                <div class="stat-label">Fossil Fuel Exposure</div>
+                            </div>
+                            <div class="impact-stat">
+                                <div class="stat-value">5.1%</div>
+                                <div class="stat-label">Impact Investing</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ESG Recommendations -->
+                    <div class="esg-recommendations">
+                        <h3>ESG Improvement Opportunities</h3>
+                        <div class="esg-rec-list">
+                            <div class="esg-rec-item">
+                                <div class="rec-category env">Environmental</div>
+                                <div class="rec-text">Increase renewable energy allocation to 25%</div>
+                                <div class="rec-impact">Reduce carbon footprint by 12%</div>
+                            </div>
+                            <div class="esg-rec-item">
+                                <div class="rec-category social">Social</div>
+                                <div class="rec-text">Invest in companies with >45% board diversity</div>
+                                <div class="rec-impact">Improve social score to 4.1</div>
+                            </div>
+                            <div class="esg-rec-item">
+                                <div class="rec-category governance">Governance</div>
+                                <div class="rec-text">Divest from poor tax transparency companies</div>
+                                <div class="rec-impact">Increase governance score to 4.3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Settings View -->
             <div id="settingsView" class="view">
                 <div class="settings-header">
@@ -484,6 +874,8 @@
     </div>
 
     <script src="app.js"></script>
+    <script src="test-suite.js"></script>
+    <script src="phase3-test-suite.js"></script>
     <script>
         // Immediate test script
         console.log('=== IMMEDIATE TEST: JavaScript is running ===');

@@ -176,6 +176,11 @@ function initializeApp() {
   setupTimeframeSelector();
   setupExecuteRebalancing();
   
+  // Initialize Phase 3 Enterprise Features with delay to ensure scripts are loaded
+  setTimeout(() => {
+    initializeEnterpriseFeatures();
+  }, 500);
+  
   // Initialize charts when dashboard is first loaded
   setTimeout(() => {
     initializeCharts();
@@ -266,6 +271,12 @@ function setupNavigation() {
         setTimeout(() => initializeRebalancingChart(), 100);
       } else if (targetView === 'analytics') {
         setTimeout(() => initializeAnalyticsCharts(), 100);
+      } else if (targetView === 'reports') {
+        setTimeout(() => initializeReportsView(), 100);
+      } else if (targetView === 'risk') {
+        setTimeout(() => initializeRiskView(), 100);
+      } else if (targetView === 'esg') {
+        setTimeout(() => initializeESGView(), 100);
       }
     });
   });
@@ -1062,3 +1073,416 @@ function generateMockHistoricalData(currentPrice) {
   
   return data.reverse();
 }
+
+// =====================================
+// Phase 3: Enterprise Features
+// =====================================
+
+// Initialize enterprise features
+function initializeEnterpriseFeatures() {
+  console.log('🏢 Initializing Enterprise Features...');
+  
+  // Check if classes are available
+  console.log('EnterpriseAIEngine available:', typeof EnterpriseAIEngine !== 'undefined');
+  console.log('AdvancedReportingEngine available:', typeof AdvancedReportingEngine !== 'undefined');
+  
+  // Initialize enterprise engines with error handling
+  try {
+    if (typeof EnterpriseAIEngine !== 'undefined') {
+      window.enterpriseAI = new EnterpriseAIEngine();
+      console.log('✅ EnterpriseAIEngine initialized successfully');
+    } else {
+      console.warn('⚠️ EnterpriseAIEngine class not found');
+      return false;
+    }
+  } catch (e) {
+    console.error('❌ Failed to initialize EnterpriseAIEngine:', e);
+    return false;
+  }
+  
+  try {
+    if (typeof AdvancedReportingEngine !== 'undefined') {
+      window.reportingEngine = new AdvancedReportingEngine();
+      console.log('✅ AdvancedReportingEngine initialized successfully');
+    } else {
+      console.warn('⚠️ AdvancedReportingEngine class not found');
+      return false;
+    }
+  } catch (e) {
+    console.error('❌ Failed to initialize AdvancedReportingEngine:', e);
+    return false;
+  }
+  
+  setupEnterpriseEventHandlers();
+  return true;
+}
+
+// Ensure enterprise features are initialized when needed
+function ensureEnterpriseInitialization() {
+  if (!window.enterpriseAI || !window.reportingEngine) {
+    console.log('🔄 Enterprise features not initialized, attempting to initialize...');
+    return initializeEnterpriseFeatures();
+  }
+  return true;
+}
+
+// Setup event handlers for enterprise features
+function setupEnterpriseEventHandlers() {
+  // Report generation handlers
+  document.querySelectorAll('.report-item button').forEach(button => {
+    button.addEventListener('click', function() {
+      const reportType = this.closest('.report-item').dataset.report;
+      generateReport(reportType);
+    });
+  });
+
+  // Risk analysis handlers
+  const generateReportBtn = document.getElementById('generateReport');
+  if (generateReportBtn) {
+    generateReportBtn.addEventListener('click', () => {
+      showReportDialog();
+    });
+  }
+
+  const scheduleReportsBtn = document.getElementById('scheduleReports');
+  if (scheduleReportsBtn) {
+    scheduleReportsBtn.addEventListener('click', () => {
+      showScheduleDialog();
+    });
+  }
+
+  // Close preview handler
+  const closePreviewBtn = document.getElementById('closePreview');
+  if (closePreviewBtn) {
+    closePreviewBtn.addEventListener('click', () => {
+      document.getElementById('reportPreview').classList.add('hidden');
+    });
+  }
+}
+
+// Initialize Reports View
+function initializeReportsView() {
+  console.log('📊 Initializing Reports View...');
+  
+  // Simulate loading recent reports
+  updateReportHistory();
+  
+  // Add animation to report items
+  const reportItems = document.querySelectorAll('.report-item');
+  reportItems.forEach((item, index) => {
+    setTimeout(() => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+    }, index * 100);
+  });
+}
+
+// Initialize Risk Management View
+function initializeRiskView() {
+  console.log('🛡️ Initializing Risk Management View...');
+  
+  // Create risk gauge chart
+  createRiskGaugeChart();
+  
+  // Create concentration chart
+  createConcentrationChart();
+  
+  // Update risk metrics
+  updateRiskMetrics();
+}
+
+// Initialize ESG View
+function initializeESGView() {
+  console.log('🌱 Initializing ESG View...');
+  
+  // Create impact chart
+  createImpactChart();
+  
+  // Animate ESG components
+  animateESGComponents();
+}
+
+// Create Risk Gauge Chart
+function createRiskGaugeChart() {
+  const ctx = document.getElementById('riskGauge');
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [6.2, 3.8], // Risk score out of 10
+        backgroundColor: [
+          '#FFC185', // Risk portion
+          '#f3f4f6'  // Remaining portion
+        ],
+        borderWidth: 0,
+        cutout: '70%'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          enabled: false
+        }
+      },
+      rotation: -90,
+      circumference: 180
+    }
+  });
+}
+
+// Create Concentration Chart
+function createConcentrationChart() {
+  const ctx = document.getElementById('concentrationChart');
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Technology', 'Healthcare', 'Financials', 'Energy', 'Utilities'],
+      datasets: [{
+        label: 'Current Allocation',
+        data: [22.1, 18.5, 15.2, 12.8, 8.4],
+        backgroundColor: '#1FB8CD',
+        borderRadius: 4
+      }, {
+        label: 'Target Allocation',
+        data: [18.0, 20.0, 15.0, 15.0, 10.0],
+        backgroundColor: '#FFC185',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 25,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Create Impact Chart for ESG
+function createImpactChart() {
+  const ctx = document.getElementById('impactChart');
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Positive Impact', 'Neutral', 'Negative Screening'],
+      datasets: [{
+        data: [67.2, 24.5, 8.3],
+        backgroundColor: ['#22c55e', '#f3f4f6', '#ef4444'],
+        borderWidth: 2,
+        borderColor: '#ffffff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.label + ': ' + context.parsed + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Generate specific reports
+function generateReport(reportType) {
+  console.log(`📋 Generating ${reportType} report...`);
+  
+  if (!window.reportingEngine) {
+    console.warn('Reporting engine not initialized');
+    return;
+  }
+
+  let reportData;
+  switch (reportType) {
+    case 'performance':
+      reportData = window.reportingEngine.generatePerformanceReport(portfolioData);
+      break;
+    case 'risk':
+      reportData = window.reportingEngine.generateRiskReport(portfolioData);
+      break;
+    case 'esg':
+      reportData = window.reportingEngine.generateESGReport(portfolioData);
+      break;
+    case 'tax':
+      reportData = window.reportingEngine.generateTaxReport(portfolioData);
+      break;
+    case 'compliance':
+      reportData = window.reportingEngine.generateComplianceReport(portfolioData);
+      break;
+    default:
+      console.error('Unknown report type:', reportType);
+      return;
+  }
+
+  displayReportPreview(reportData, reportType);
+}
+
+// Display report preview
+function displayReportPreview(reportData, reportType) {
+  const preview = document.getElementById('reportPreview');
+  const content = document.getElementById('reportContent');
+  
+  if (!preview || !content) return;
+
+  // Generate HTML content based on report type
+  content.innerHTML = generateReportHTML(reportData, reportType);
+  
+  // Show preview
+  preview.classList.remove('hidden');
+}
+
+// Generate HTML for different report types
+function generateReportHTML(reportData, reportType) {
+  switch (reportType) {
+    case 'performance':
+      return `
+        <h4>Performance Report</h4>
+        <div class="report-section">
+          <h5>Executive Summary</h5>
+          <p>Portfolio Value: $${portfolioData.portfolio_metrics.total_portfolio_value.toLocaleString()}</p>
+          <p>Total Return: ${portfolioData.portfolio_metrics.overall_return_percent}%</p>
+          <p>Risk Score: ${portfolioData.portfolio_metrics.risk_score}/10</p>
+        </div>
+        <div class="report-section">
+          <h5>Key Highlights</h5>
+          <ul>
+            <li>Portfolio outperformed benchmark by 0.36%</li>
+            <li>Risk metrics within target range</li>
+            <li>Diversification score: Good</li>
+          </ul>
+        </div>
+      `;
+    case 'risk':
+      return `
+        <h4>Risk Assessment Report</h4>
+        <div class="report-section">
+          <h5>Risk Overview</h5>
+          <p>Current Risk Level: Moderate</p>
+          <p>Risk Score: 6.2/10</p>
+          <p>VaR (95%): -$265 daily</p>
+        </div>
+        <div class="report-section">
+          <h5>Risk Recommendations</h5>
+          <ul>
+            <li>Reduce technology sector concentration</li>
+            <li>Consider currency hedging for international exposure</li>
+            <li>Monitor liquidity during market stress</li>
+          </ul>
+        </div>
+      `;
+    case 'esg':
+      return `
+        <h4>ESG Impact Report</h4>
+        <div class="report-section">
+          <h5>ESG Score Breakdown</h5>
+          <p>Overall ESG Score: 3.9/5 (B+)</p>
+          <p>Environmental: 3.8/5</p>
+          <p>Social: 4.1/5</p>
+          <p>Governance: 3.9/5</p>
+        </div>
+        <div class="report-section">
+          <h5>Impact Metrics</h5>
+          <p>Positive Impact: 67.2%</p>
+          <p>Carbon Intensity: 142.5 tCO2e/$M</p>
+          <p>Renewable Energy: 18.4%</p>
+        </div>
+      `;
+    default:
+      return `<h4>${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</h4><p>Report content would be displayed here.</p>`;
+  }
+}
+
+// Update risk metrics
+function updateRiskMetrics() {
+  // Animate risk cards
+  const riskCards = document.querySelectorAll('.risk-card');
+  riskCards.forEach((card, index) => {
+    setTimeout(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 150);
+  });
+}
+
+// Animate ESG components
+function animateESGComponents() {
+  const components = document.querySelectorAll('.esg-component');
+  components.forEach((component, index) => {
+    setTimeout(() => {
+      const fill = component.querySelector('.bar-fill');
+      if (fill) {
+        fill.style.width = fill.style.width || '0%';
+      }
+    }, index * 200);
+  });
+}
+
+// Update report history
+function updateReportHistory() {
+  const historyItems = document.querySelectorAll('.history-item');
+  historyItems.forEach((item, index) => {
+    setTimeout(() => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateX(0)';
+    }, index * 100);
+  });
+}
+
+// Show report generation dialog
+function showReportDialog() {
+  alert('Report generation dialog would open here.\nSelect report type, date range, and format.');
+}
+
+// Show schedule dialog
+function showScheduleDialog() {
+  alert('Report scheduling dialog would open here.\nConfigure automated report delivery.');
+}
+
+console.log('🚀 Phase 3 Enterprise Features loaded successfully!');
+
+// Make enterprise initialization globally accessible
+window.initializeEnterpriseFeatures = initializeEnterpriseFeatures;
+window.ensureEnterpriseInitialization = ensureEnterpriseInitialization;
+
+// Auto-initialize when DOM is loaded if not already done
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(() => {
+    if (!window.enterpriseAI || !window.reportingEngine) {
+      console.log('🔄 Auto-initializing enterprise features...');
+      initializeEnterpriseFeatures();
+    }
+  }, 1000);
+});
