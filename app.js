@@ -5,6 +5,10 @@ console.log('=== APP.JS LOADED SUCCESSFULLY ===');
 let aiEnhancer;
 let advancedAI;
 
+// Chart initialization retry counter
+let chartInitRetryCount = 0;
+const MAX_CHART_INIT_RETRIES = 50;
+
 // Application Data
 const portfolioData = {
   user_profile: {
@@ -169,12 +173,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
   console.log('=== INITIALIZING APP ===');
+  
+  // Initialize Chart.js defaults first (before any charts are created)
+  initializeChartDefaults();
+  
+  // Setup core functionality
   setupLoginForm();
   setupNavigation();
   setupPortfolioSearch();
   setupAllocationSliders();
   setupTimeframeSelector();
   setupExecuteRebalancing();
+  
+  // Setup UI enhancements
+  setupUserProfileDropdown();
+  setupNotifications();
+  setupHoverEffects();
+  setupLazyLoadCharts();
   
   // Initialize Phase 3 Enterprise Features with delay to ensure scripts are loaded
   setTimeout(() => {
@@ -185,6 +200,8 @@ function initializeApp() {
   setTimeout(() => {
     initializeCharts();
   }, 100);
+  
+  console.log('Portfolio Nexus application initialized successfully!');
 }
 
 // Login functionality
@@ -286,6 +303,25 @@ function setupNavigation() {
 function initializeCharts() {
   console.log('=== INITIALIZING CHARTS AND AI ===');
   
+  // Check if Chart.js is loaded
+  if (typeof Chart === 'undefined') {
+    chartInitRetryCount++;
+    if (chartInitRetryCount < MAX_CHART_INIT_RETRIES) {
+      console.warn(`⚠️ Chart.js not loaded yet, will retry... (${chartInitRetryCount}/${MAX_CHART_INIT_RETRIES})`);
+      setTimeout(() => initializeCharts(), 100);
+    } else {
+      console.error('❌ Chart.js failed to load after maximum retries. Charts will not be displayed.');
+      console.error('   This may be due to ad-blocker or CDN blocking. Charts are optional for core functionality.');
+      // Initialize advanced AI features even if charts don't load
+      initializeAdvancedAI();
+    }
+    return;
+  }
+  
+  // Reset retry counter on successful load
+  chartInitRetryCount = 0;
+  console.log('✅ Chart.js loaded successfully!');
+  
   // Initialize basic charts
   createPerformanceChart();
   createAllocationChart();
@@ -315,6 +351,10 @@ function initializeAdvancedAI() {
 function createPerformanceChart() {
   const ctx = document.getElementById('performanceChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   
   new Chart(ctx, {
     type: 'line',
@@ -379,6 +419,10 @@ function createPerformanceChart() {
 function createAllocationChart() {
   const ctx = document.getElementById('allocationChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   
   const allocations = portfolioData.current_allocations;
   const labels = [];
@@ -448,6 +492,10 @@ function createAllocationChart() {
 function initializeRebalancingChart() {
   const ctx = document.getElementById('rebalancingChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   
   const current = portfolioData.current_allocations;
   const target = portfolioData.target_allocation;
@@ -515,6 +563,10 @@ function initializeAnalyticsCharts() {
 function createAnalyticsChart() {
   const ctx = document.getElementById('analyticsChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   
   const returns = portfolioData.performance_history.map((item, index) => {
     if (index === 0) return 0;
@@ -566,6 +618,10 @@ function createAnalyticsChart() {
 function createSectorChart() {
   const ctx = document.getElementById('sectorChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   
   new Chart(ctx, {
     type: 'doughnut',
@@ -758,72 +814,85 @@ function getOriginalAssetType(displayType) {
 }
 
 // User profile dropdown functionality
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('user-dropdown')) {
-    e.preventDefault();
-    
-    // Simple logout functionality
-    if (confirm('Are you sure you want to logout?')) {
-      const app = document.getElementById('app');
-      const loginPage = document.getElementById('loginPage');
+function setupUserProfileDropdown() {
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('user-dropdown')) {
+      e.preventDefault();
       
-      app.classList.add('hidden');
-      loginPage.classList.remove('hidden');
-      loginPage.style.opacity = '1';
-    }
-  }
-});
-
-// Notification functionality
-document.querySelector('.notification-icon')?.addEventListener('click', function() {
-  alert('You have 3 new notifications:\n\n• Portfolio rebalancing recommended\n• Market volatility alert\n• Monthly performance report ready');
-});
-
-// Add hover effects for better UX
-document.querySelectorAll('.card, .stat-card, .insight-item').forEach(element => {
-  element.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-2px)';
-  });
-  
-  element.addEventListener('mouseleave', function() {
-    this.style.transform = 'translateY(0)';
-  });
-});
-
-// Initialize tooltips for charts
-Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(31, 33, 33, 0.9)';
-Chart.defaults.plugins.tooltip.titleColor = '#f5f5f5';
-Chart.defaults.plugins.tooltip.bodyColor = '#f5f5f5';
-Chart.defaults.plugins.tooltip.borderColor = '#1FB8CD';
-Chart.defaults.plugins.tooltip.borderWidth = 1;
-Chart.defaults.plugins.tooltip.cornerRadius = 8;
-
-// Performance optimization: Lazy load charts
-const observerOptions = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 0.1
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const chartCanvas = entry.target.querySelector('canvas');
-      if (chartCanvas && !chartCanvas.hasAttribute('data-loaded')) {
-        chartCanvas.setAttribute('data-loaded', 'true');
-        // Initialize specific chart based on canvas ID
-        // This would be expanded for production use
+      // Simple logout functionality
+      if (confirm('Are you sure you want to logout?')) {
+        const app = document.getElementById('app');
+        const loginPage = document.getElementById('loginPage');
+        
+        app.classList.add('hidden');
+        loginPage.classList.remove('hidden');
+        loginPage.style.opacity = '1';
       }
     }
   });
-}, observerOptions);
+}
 
-// Observe chart containers for lazy loading
-document.querySelectorAll('.chart-container').forEach(container => {
-  observer.observe(container);
-});
+// Notification functionality
+function setupNotifications() {
+  const notificationIcon = document.querySelector('.notification-icon');
+  if (notificationIcon) {
+    notificationIcon.addEventListener('click', function() {
+      alert('You have 3 new notifications:\n\n• Portfolio rebalancing recommended\n• Market volatility alert\n• Monthly performance report ready');
+    });
+  }
+}
 
-console.log('Portfolio Nexus application initialized successfully!');
+// Add hover effects for better UX
+function setupHoverEffects() {
+  document.querySelectorAll('.card, .stat-card, .insight-item').forEach(element => {
+    element.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px)';
+    });
+    
+    element.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+    });
+  });
+}
+
+// Initialize tooltips for charts
+function initializeChartDefaults() {
+  if (typeof Chart !== 'undefined') {
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(31, 33, 33, 0.9)';
+    Chart.defaults.plugins.tooltip.titleColor = '#f5f5f5';
+    Chart.defaults.plugins.tooltip.bodyColor = '#f5f5f5';
+    Chart.defaults.plugins.tooltip.borderColor = '#1FB8CD';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.cornerRadius = 8;
+  }
+}
+
+// Performance optimization: Lazy load charts
+function setupLazyLoadCharts() {
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const chartCanvas = entry.target.querySelector('canvas');
+        if (chartCanvas && !chartCanvas.hasAttribute('data-loaded')) {
+          chartCanvas.setAttribute('data-loaded', 'true');
+          // Initialize specific chart based on canvas ID
+          // This would be expanded for production use
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe chart containers for lazy loading
+  document.querySelectorAll('.chart-container').forEach(container => {
+    observer.observe(container);
+  });
+}
 
 // Advanced AI Features Implementation
 // ===================================
@@ -1206,6 +1275,11 @@ function initializeESGView() {
 function createRiskGaugeChart() {
   const ctx = document.getElementById('riskGauge');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
+  if (!ctx) return;
 
   new Chart(ctx, {
     type: 'doughnut',
@@ -1240,6 +1314,11 @@ function createRiskGaugeChart() {
 // Create Concentration Chart
 function createConcentrationChart() {
   const ctx = document.getElementById('concentrationChart');
+  if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
   if (!ctx) return;
 
   new Chart(ctx, {
@@ -1285,6 +1364,10 @@ function createConcentrationChart() {
 function createImpactChart() {
   const ctx = document.getElementById('impactChart');
   if (!ctx) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('⚠️ Chart.js not loaded, skipping chart creation');
+    return;
+  }
 
   new Chart(ctx, {
     type: 'pie',
