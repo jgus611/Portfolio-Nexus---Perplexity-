@@ -189,61 +189,343 @@ function initializeApp() {
 
 // Login functionality
 function setupLoginForm() {
-  console.log('=== Setting up login form ===');
+  console.log('=== SETTING UP LOGIN FORMS ===');
+  
+  // Get form elements
   const loginForm = document.getElementById('loginForm');
-  const signInButton = document.querySelector('button[type="submit"]');
+  const registerForm = document.getElementById('registerForm');
+  const resetForm = document.getElementById('resetForm');
   
-  if (!loginForm) {
-    console.error('Login form not found!');
+  // Get form containers
+  const loginContainer = document.getElementById('loginFormContainer');
+  const registerContainer = document.getElementById('registerFormContainer');
+  const resetContainer = document.getElementById('resetFormContainer');
+  
+  // Get form switching links
+  const showRegisterLink = document.getElementById('showRegisterForm');
+  const showLoginLink = document.getElementById('showLoginForm');
+  const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+  const backToLoginLink = document.getElementById('backToLogin');
+
+  if (!loginForm || !window.authManager) {
+    console.error('Login form or auth manager not found');
     return;
   }
-  
-  if (!signInButton) {
-    console.error('Sign in button not found!');
-    return;
+
+  // Form switching handlers
+  if (showRegisterLink) {
+    showRegisterLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('register');
+    });
   }
-  
-  console.log('Login form found, adding event listeners...');
-  
-  // Add both form submit and button click handlers for redundancy
-  loginForm.addEventListener('submit', handleLogin);
-  signInButton.addEventListener('click', function(e) {
-    console.log('Button clicked directly!');
-    e.preventDefault();
-    handleLogin(e);
-  });
-  
-  function handleLogin(e) {
-    e.preventDefault();
-    console.log('=== LOGIN SUBMITTED ===');
+
+  if (showLoginLink) {
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('login');
+    });
+  }
+
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('reset');
+    });
+  }
+
+  if (backToLoginLink) {
+    backToLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('login');
+    });
+  }
+
+  // Form switching function
+  function switchToForm(formType) {
+    clearAuthMessages();
     
-    // Simulate login process
+    // Hide all forms
+    if (loginContainer) loginContainer.classList.add('hidden');
+    if (registerContainer) registerContainer.classList.add('hidden');
+    if (resetContainer) resetContainer.classList.add('hidden');
+    
+    // Show selected form
+    setTimeout(() => {
+      switch (formType) {
+        case 'register':
+          if (registerContainer) registerContainer.classList.remove('hidden');
+          break;
+        case 'reset':
+          if (resetContainer) resetContainer.classList.remove('hidden');
+          break;
+        default:
+          if (loginContainer) loginContainer.classList.remove('hidden');
+      }
+    }, 150);
+  }
+
+  // Login form handler
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    console.log('=== LOGIN FORM SUBMITTED ===');
+    
+    showLoading(true);
+    clearAuthMessages();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+      const result = await window.authManager.loginUser({ email, password });
+      
+      if (result.success) {
+        showAuthMessage('Login successful! Redirecting...', 'success');
+        setTimeout(() => {
+          handleSuccessfulLogin(result.user);
+        }, 1000);
+      } else {
+        showAuthMessage(result.error, 'error');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      showAuthMessage('Login failed. Please try again.', 'error');
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  // Registration form handler
+  if (registerForm) {
+    registerForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      console.log('=== REGISTRATION FORM SUBMITTED ===');
+      
+      showLoading(true);
+      clearAuthMessages();
+      
+      const firstName = document.getElementById('registerFirstName').value;
+      const lastName = document.getElementById('registerLastName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const riskTolerance = document.getElementById('riskTolerance').value;
+      const agreeTerms = document.getElementById('agreeTerms').checked;
+      
+      // Client-side validation
+      if (password !== confirmPassword) {
+        showAuthMessage('Passwords do not match', 'error');
+        showLoading(false);
+        return;
+      }
+      
+      if (!agreeTerms) {
+        showAuthMessage('Please agree to the Terms of Service and Privacy Policy', 'error');
+        showLoading(false);
+        return;
+      }
+      
+      try {
+        const result = await window.authManager.registerUser({
+          firstName,
+          lastName,
+          email,
+          password,
+          riskTolerance
+        });
+        
+        if (result.success) {
+          showAuthMessage(result.message, 'success');
+          setTimeout(() => {
+            switchToForm('login');
+            // Pre-fill email
+            document.getElementById('loginEmail').value = email;
+          }, 2000);
+        } else {
+          showAuthMessage(result.error, 'error');
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        showAuthMessage('Registration failed. Please try again.', 'error');
+      } finally {
+        showLoading(false);
+      }
+    });
+  }
+
+  // Password reset form handler
+  if (resetForm) {
+    resetForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      console.log('=== PASSWORD RESET FORM SUBMITTED ===');
+      
+      showLoading(true);
+      clearAuthMessages();
+      
+      const email = document.getElementById('resetEmail').value;
+      
+      try {
+        const result = await window.authManager.resetPassword(email);
+        
+        if (result.success) {
+          showAuthMessage(result.message, 'success');
+          setTimeout(() => {
+            switchToForm('login');
+          }, 3000);
+        } else {
+          showAuthMessage(result.error, 'error');
+        }
+      } catch (error) {
+        console.error('Password reset error:', error);
+        showAuthMessage('Password reset failed. Please try again.', 'error');
+      } finally {
+        showLoading(false);
+      }
+    });
+  }
+
+  // Password confirmation validation
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const passwordInput = document.getElementById('registerPassword');
+  
+  if (confirmPasswordInput && passwordInput) {
+    confirmPasswordInput.addEventListener('input', function() {
+      if (this.value && passwordInput.value) {
+        if (this.value === passwordInput.value) {
+          this.classList.remove('invalid');
+          this.classList.add('valid');
+        } else {
+          this.classList.remove('valid');
+          this.classList.add('invalid');
+        }
+      } else {
+        this.classList.remove('valid', 'invalid');
+      }
+    });
+  }
+
+  // Check if user is already authenticated
+  if (window.authManager.isAuthenticated()) {
+    const user = window.authManager.getCurrentUser();
+    console.log('User already authenticated:', user.email);
+    handleSuccessfulLogin(user);
+  }
+
+  // Handle successful login
+  function handleSuccessfulLogin(user) {
+    console.log('Handling successful login for:', user.email);
+    
+    // Update user interface with user data
+    updateUserInterface(user);
+    
+    // Show main application
     const loginPage = document.getElementById('loginPage');
     const app = document.getElementById('app');
     
-    if (!loginPage || !app) {
-      console.error('Required elements not found:', { loginPage, app });
-      return;
+    if (loginPage && app) {
+      loginPage.style.opacity = '0';
+      setTimeout(() => {
+        loginPage.classList.add('hidden');
+        app.classList.remove('hidden');
+        
+        // Initialize application features
+        setTimeout(() => {
+          console.log('Initializing app features...');
+          if (typeof initializeCharts === 'function') {
+            initializeCharts();
+          }
+          if (typeof populateHoldingsTable === 'function') {
+            populateHoldingsTable();
+          }
+          if (typeof initializeEnterpriseFeatures === 'function') {
+            initializeEnterpriseFeatures();
+          }
+        }, 100);
+      }, 300);
+    }
+  }
+
+  // Update UI with user data
+  function updateUserInterface(user) {
+    // Update user name in header if element exists
+    const userNameElement = document.querySelector('.user-name');
+    if (userNameElement) {
+      userNameElement.textContent = `${user.firstName} ${user.lastName}`;
     }
     
-    console.log('Starting login transition...');
-    loginPage.style.opacity = '0';
-    setTimeout(() => {
-      loginPage.classList.add('hidden');
-      app.classList.remove('hidden');
-      
-      // Initialize charts and data after app is shown
-      setTimeout(() => {
-        console.log('Initializing charts and data...');
-        if (typeof initializeCharts === 'function') {
-          initializeCharts();
-        }
-        if (typeof populateHoldingsTable === 'function') {
-          populateHoldingsTable();
-        }
-      }, 100);
-    }, 300);
+    // Update portfolio data with user preferences
+    if (portfolioData && portfolioData.user_profile) {
+      portfolioData.user_profile.name = `${user.firstName} ${user.lastName}`;
+      portfolioData.user_profile.risk_appetite = user.preferences?.riskTolerance || 'moderate';
+    }
+    
+    console.log('User interface updated for:', user.email);
   }
+
+  // Show authentication messages
+  function showAuthMessage(message, type) {
+    const messagesContainer = document.getElementById('authMessages');
+    const successElement = document.getElementById('authSuccess');
+    const errorElement = document.getElementById('authError');
+    const infoElement = document.getElementById('authInfo');
+    
+    if (!messagesContainer) return;
+    
+    // Clear previous messages
+    clearAuthMessages();
+    
+    // Show container
+    messagesContainer.classList.remove('hidden');
+    
+    // Show appropriate message
+    switch (type) {
+      case 'success':
+        if (successElement) {
+          successElement.textContent = message;
+          successElement.classList.remove('hidden');
+        }
+        break;
+      case 'error':
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.classList.remove('hidden');
+        }
+        break;
+      case 'info':
+        if (infoElement) {
+          infoElement.textContent = message;
+          infoElement.classList.remove('hidden');
+        }
+        break;
+    }
+  }
+
+  // Clear authentication messages
+  function clearAuthMessages() {
+    const messagesContainer = document.getElementById('authMessages');
+    const successElement = document.getElementById('authSuccess');
+    const errorElement = document.getElementById('authError');
+    const infoElement = document.getElementById('authInfo');
+    
+    if (messagesContainer) messagesContainer.classList.add('hidden');
+    if (successElement) successElement.classList.add('hidden');
+    if (errorElement) errorElement.classList.add('hidden');
+    if (infoElement) infoElement.classList.add('hidden');
+  }
+
+  // Show/hide loading indicator
+  function showLoading(show) {
+    const loadingElement = document.getElementById('authLoading');
+    if (loadingElement) {
+      if (show) {
+        loadingElement.classList.remove('hidden');
+      } else {
+        loadingElement.classList.add('hidden');
+      }
+    }
+  }
+
+  console.log('✅ Authentication system setup complete');
 }
 
 // Navigation functionality

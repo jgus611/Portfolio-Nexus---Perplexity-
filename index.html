@@ -13,6 +13,9 @@
     <script src="advanced-ai-engine.js" defer></script>
     <script src="enterprise-ai-engine.js" defer></script>
     <script src="advanced-reporting-engine.js" defer></script>
+    <script src="authentication-manager.js" defer></script>
+    <script src="data-manager.js" defer></script>
+    <script src="production-manager.js" defer></script>
 </head>
 <body>
     <!-- Login Page -->
@@ -22,19 +25,111 @@
                 <h1 class="login-title">Portfolio Nexus</h1>
                 <p class="login-subtitle">AI-Powered Portfolio Management</p>
             </div>
-            <div class="login-form">
+            
+            <!-- Login Form -->
+            <div id="loginFormContainer" class="login-form">
                 <h2>Welcome Back</h2>
                 <form id="loginForm">
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="alex.thompson@email.com" required>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password</label>
-                        <input type="password" class="form-control" value="••••••••" required>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn--primary btn--full-width" onclick="console.log('Direct onclick works!')">Sign In</button>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe"> Remember me
+                        </label>
+                        <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Sign In</button>
+                    <div class="form-divider">
+                        <span>Don't have an account?</span>
+                        <a href="#" id="showRegisterForm" class="switch-form-link">Sign Up</a>
+                    </div>
                 </form>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registerFormContainer" class="login-form hidden">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="registerFirstName" class="form-control" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="registerLastName" class="form-control" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="registerPassword" class="form-control" placeholder="Create a password" required>
+                        <div class="password-requirements">
+                            <small>Password must contain at least 8 characters, uppercase, lowercase, number, and special character</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Risk Tolerance</label>
+                        <select id="riskTolerance" class="form-control">
+                            <option value="conservative">Conservative</option>
+                            <option value="moderate" selected>Moderate</option>
+                            <option value="aggressive">Aggressive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required> 
+                            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Create Account</button>
+                    <div class="form-divider">
+                        <span>Already have an account?</span>
+                        <a href="#" id="showLoginForm" class="switch-form-link">Sign In</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Password Reset Form -->
+            <div id="resetFormContainer" class="login-form hidden">
+                <h2>Reset Password</h2>
+                <p class="reset-description">Enter your email address and we'll send you a link to reset your password.</p>
+                <form id="resetForm">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="resetEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Send Reset Link</button>
+                    <div class="form-divider">
+                        <a href="#" id="backToLogin" class="switch-form-link">← Back to Sign In</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Authentication Messages -->
+            <div id="authMessages" class="auth-messages hidden">
+                <div id="authSuccess" class="message success hidden"></div>
+                <div id="authError" class="message error hidden"></div>
+                <div id="authInfo" class="message info hidden"></div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="authLoading" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <span>Processing...</span>
             </div>
         </div>
     </div>
@@ -876,6 +971,7 @@
     <script src="app.js"></script>
     <script src="test-suite.js"></script>
     <script src="phase3-test-suite.js"></script>
+    <script src="phase4-test-suite.js"></script>
     <script>
         // Immediate test script
         console.log('=== IMMEDIATE TEST: JavaScript is running ===');
